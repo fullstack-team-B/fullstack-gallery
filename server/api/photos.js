@@ -11,3 +11,14 @@ router.get('/photos', async(req, res, next)=>{
   }
 })
 
+router.get('/photos/:id', async (req, res, next)=>{
+  try {
+    const photoId = req.params.id
+    const photo = await Photo.findByPk(photoId)
+
+    res.json(photo)
+  } catch (error) {
+    next(error)
+  }
+})
+
