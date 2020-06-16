@@ -1,22 +1,22 @@
 const router = require('express').Router()
-const {Photo} = require('../db/models')
+const { PictureList } = require('../db/models')
 module.exports = router
 
-router.get('/photos', async(req, res, next)=>{
+router.get('/pictures', async(req, res, next)=>{
   try {
-    const allPhotos = await Photo.findAll()
-    res.json(allPhotos)
+    const allPictures = await PictureList.findAll()
+    res.json(allPictures)
   } catch (error) {
     next(error)
   }
 })
 
-router.get('/photos/:id', async (req, res, next)=>{
+router.get('/pictures/:id', async (req, res, next)=>{
   try {
-    const photoId = req.params.id
-    const photo = await Photo.findByPk(photoId)
+    const pictureId = req.params.id
+    const picture = await PictureList.findByPk(pictureId)
 
-    res.json(photo)
+    res.json(picture)
   } catch (error) {
     next(error)
   }

@@ -2,29 +2,29 @@ const {expect} = require('chai')
 const request = require('supertest')
 const db = require('../db')
 const app = require('../index')
-const Photo = db.model('photo')
+const Picture = db.model('picture')
 
-describe('Photo routes', ()=>{
+describe('Picture routes', ()=>{
   beforeEach(()=>{
     return db.sync({force: true})
   })
 
-  describe('/api/photos', ()=> {
-    const photoTitle = "Water"
+  describe('/api/pictures', ()=> {
+    const pictureTitle = "Water"
 
     beforeEach(() => {
-      return Photo.create({
-        title: photoTitle
+      return Picture.create({
+        title: pictureTitle
       })
     })
 
-    it('GET /api/photos', async () => {
+    it('GET /api/pictures', async () => {
       const res = await request(app)
-        .get('/api/photos')
+        .get('/api/pictures')
         .expect(200)
 
       expect(res.body).to.be.an('array')
-      expect(res.body[0].email).to.be.equal(photoTitle)
+      expect(res.body[0].email).to.be.equal(pictureTitle)
     })
   })
 })
