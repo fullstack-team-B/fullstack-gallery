@@ -3,17 +3,42 @@
 const db = require('../server/db')
 const {User} = require('../server/db/models')
 
+const faker = require('faker')
+
 async function seed() {
-  await db.sync({force: true})
-  console.log('db synced!')
+  try {
+    await db.sync({force: true})
+    console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
-  ])
+    const dummyUsers = []
 
-  console.log(`seeded ${users.length} users`)
-  console.log(`seeded successfully`)
+    for (let i = 0; i < 10; i++) {
+      dummyUsers.push({
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password()
+      })
+
+      // dummyPictures.push({
+      //   name: faker.commerce.productName(),
+      //   price: faker.commerce.price(),
+      //   description: faker.lorem.words(),
+      //   imageUrl: faker.image.imageUrl(),
+      // })
+    }
+
+    const users = await Promise.all(
+      dummyUsers.map(async ele => {
+        await User.create(ele)
+      })
+    )
+
+    console.log(`seeded ${users.length} users`)
+    console.log(`seeded successfully`)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 // We've separated the `seed` function from the `runSeed` function.
