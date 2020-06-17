@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const Orders = db.define('orders', {
+const Order = db.define('order', {
   orderPlaced: {
     type: Sequelize.DATE,
     allowNull: false
@@ -10,7 +10,7 @@ const Orders = db.define('orders', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  secondName: {
+  lastName: {
     type: Sequelize.STRING,
     allowNull: false
   },
@@ -20,4 +20,4 @@ const Orders = db.define('orders', {
   }
 })
 
-module.exports = PaymentMethod
+module.exports = Order
