@@ -1,14 +1,99 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width initial-scale=1.0'>
-    <title>Boilermaker</title>
-    <link rel="stylesheet" href="/style.css" />
-    <script defer src="/bundle.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0" />
+    <title>Fullstack Gallery</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- <script defer src="/bundle.js"></script> -->
   </head>
   <body>
     <div id="app"></div>
+    <div id="nav_bar">
+      <header>
+        <img class="logo" src="./favicon.ico" alt="logo" />
+        <p class="shop_name">Fullstack Gallery</p>
+
+        <nav>
+          <ul class="nav_links">
+            <li><a class="shop" href="#">Shop</a></li>
+            <li><a class="account" href="#">Account</a></li>
+            <li><a class="cart" href="#">Cart</a></li>
+          </ul>
+        </nav>
+      </header>
+    </div>
+    <div class="items">
+      <div class="shop_bar">
+        <div><p class="shop">Shop</p></div>
+        <div class="sort_by">
+          <label for="sort_by">Sort by</label>
+          <select name="sort_by" id="sort_by">
+            <option value="popularity">Popularity</option>
+            <option value="low">Price low to high</option>
+            <option value="high">Price high to low</option>
+          </select>
+        </div>
+      </div>
+      <div class="pictures">
+        <div>
+          <div
+            class="square"
+            style="height: 210px; width: 200px; background-color: #555;"
+          >
+            <div
+              class="image_sample"
+              style="
+                height: 130px;
+                width: 170px;
+                background-color: rgb(255, 254, 254);
+              "
+            ></div>
+            <div class="detail">
+              <p>Product Title</p>
+              <p>$59</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="square"
+            style="height: 210px; width: 200px; background-color: #555;"
+          >
+            <div
+              class="image_sample"
+              style="
+                height: 130px;
+                width: 170px;
+                background-color: rgb(255, 254, 254);
+              "
+            ></div>
+            <div class="detail">
+              <p>Product Title</p>
+              <p>$59</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="square"
+            style="height: 210px; width: 200px; background-color: #555;"
+          >
+            <div
+              class="image_sample"
+              style="
+                height: 130px;
+                width: 170px;
+                background-color: rgb(255, 254, 254);
+              "
+            ></div>
+            <div class="detail">
+              <p>Product Title</p>
+              <p>$59</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
-
