@@ -1,7 +1,16 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {
+  User,
+  Address,
+  Artist,
+  Category,
+  Inventory,
+  Order,
+  PaymentMethods,
+  PictureList
+} = require('../server/db/models')
 
 const faker = require('faker')
 
@@ -11,30 +20,99 @@ async function seed() {
     console.log('db synced!')
 
     const dummyUsers = []
+    const dummyPictures = []
+    const dummyArtists = []
+    const dummyCategory = []
+    const dummyOrders = []
 
     for (let i = 0; i < 10; i++) {
+      // Dummy User Array
       dummyUsers.push({
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         email: faker.internet.email(),
         password: faker.internet.password()
       })
-
-      // dummyPictures.push({
-      //   name: faker.commerce.productName(),
-      //   price: faker.commerce.price(),
-      //   description: faker.lorem.words(),
-      //   imageUrl: faker.image.imageUrl(),
-      // })
+      // Dummy Picture List Array
+      dummyPictures.push({
+        name: faker.commerce.productName(),
+        price: faker.commerce.price(),
+        description: faker.lorem.words(),
+        imageUrl: faker.image.imageUrl()
+      })
     }
 
+    // Dummy Artist Array
+    for (let i = 0; i < 5; i++) {
+      dummyArtists.push({
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName()
+      })
+
+      // Dummy Orders Arrray
+      dummyOrders.push({
+        orderPlaced: faker.date.past(),
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        completed: faker.random.boolean()
+      })
+    }
+
+    // Dummy Categories Arrays
+    dummyCategory.push(
+      {
+        name: 'Landscapes',
+        description: faker.lorem.words()
+      },
+      {
+        name: 'Portraits',
+        description: faker.lorem.words()
+      },
+      {
+        name: 'Abstract',
+        description: faker.lorem.words()
+      }
+    )
+
+    // Create each of the users within the database
     const users = await Promise.all(
       dummyUsers.map(async ele => {
-        await User.create(ele)
+        return await User.create(ele)
+      })
+    )
+    // Create each of the pictures within the database
+    const pictures = await Promise.all(
+      dummyPictures.map(async ele => {
+        await PictureList.create(ele)
+      })
+    )
+
+    // Create each of the categories within the database
+    const categories = await Promise.all(
+      dummyCategory.map(async ele => {
+        await Category.create(ele)
+      })
+    )
+
+    // Create each of the artists within the database
+    const artist = await Promise.all(
+      dummyArtists.map(async ele => {
+        await Artist.create(ele)
+      })
+    )
+
+    // Create each of the orders within the database
+    const orders = await Promise.all(
+      dummyOrders.map(async ele => {
+        await Order.create(ele)
       })
     )
 
     console.log(`seeded ${users.length} users`)
+    console.log(`seeded ${pictures.length} picture products`)
+    console.log(`seeded ${categories.length} categories`)
+    console.log(`seeded ${artist.length} artists`)
+    console.log(`seeded ${orders.length} orders`)
     console.log(`seeded successfully`)
   } catch (error) {
     console.log(error)
