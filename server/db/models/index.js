@@ -10,7 +10,7 @@ const OrderDetail = require('./orderDetails')
 
 //  User to Address Association
 Address.belongsTo(User)
-User.hasMany(Address)
+User.hasOne(Address)
 
 // User to Order Association
 Order.belongsTo(User)
@@ -22,7 +22,7 @@ User.hasMany(PaymentMethods)
 
 // Category to PictureList Association
 PictureList.belongsTo(Category)
-Category.hasOne(PictureList)
+Category.hasMany(PictureList)
 
 // Artist to PictureList Association
 PictureList.belongsTo(Artist)
@@ -31,6 +31,8 @@ Artist.hasMany(PictureList)
 // Order Detail | Picture List to Orders Association
 PictureList.belongsToMany(Order, {through: 'orderDetail'})
 Order.belongsToMany(PictureList, {through: 'orderDetail'})
+
+// TODO Inventory Associations, PictureList as a foreign key in Inventory
 
 module.exports = {
   User,
