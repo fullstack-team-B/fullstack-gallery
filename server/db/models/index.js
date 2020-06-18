@@ -4,9 +4,9 @@ const Artist = require('./artist')
 const Category = require('./category')
 const Inventory = require('./inventory')
 const Order = require('./order')
-const PaymentMethods = require('./paymentMethod')
+const PaymentMethod = require('./paymentMethod')
 const PictureList = require('./picturelist')
-const OrderDetail = require('./orderDetails')
+const OrderQuantity = require('./orderQuantity')
 
 //  User to Address Association
 Address.belongsTo(User)
@@ -17,8 +17,8 @@ Order.belongsTo(User)
 User.hasMany(Order)
 
 // User to Payment Method Association
-PaymentMethods.belongsTo(User)
-User.hasMany(PaymentMethods)
+PaymentMethod.belongsTo(User)
+User.hasMany(PaymentMethod)
 
 // Category to PictureList Association
 PictureList.belongsTo(Category)
@@ -29,10 +29,8 @@ PictureList.belongsTo(Artist)
 Artist.hasMany(PictureList)
 
 // Order Detail | Picture List to Orders Association
-PictureList.belongsToMany(Order, {through: 'orderDetail'})
-Order.belongsToMany(PictureList, {through: 'orderDetail'})
-
-// TODO Inventory Associations, PictureList as a foreign key in Inventory
+PictureList.belongsToMany(Order, {through: OrderQuantity})
+Order.belongsToMany(PictureList, {through: OrderQuantity})
 
 module.exports = {
   User,
@@ -41,7 +39,7 @@ module.exports = {
   Category,
   Inventory,
   Order,
-  PaymentMethods,
+  PaymentMethod,
   PictureList,
-  OrderDetail
+  OrderQuantity
 }
