@@ -16,7 +16,7 @@ const Order = db.define('order', {
   },
   completed: {
     type: Sequelize.BOOLEAN,
-    allowNull: false
+    defaultValue: false
   }
 })
 

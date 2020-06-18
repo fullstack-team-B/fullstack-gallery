@@ -7,7 +7,7 @@ const PictureList = db.define('pictureList', {
     allowNull: false
   },
   price: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.INTEGER,
     allowNull: false
   },
   imageUrl: {

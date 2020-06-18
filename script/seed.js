@@ -36,9 +36,11 @@ async function seed() {
       // Dummy Picture List Array
       dummyPictures.push({
         name: faker.commerce.productName(),
-        price: faker.commerce.price(),
+        price: Math.ceil(faker.commerce.price(1) * 100),
         description: faker.lorem.words(),
-        imageUrl: faker.image.imageUrl()
+        imageUrl: faker.image.imageUrl(),
+        artistId: faker.random.number({min: 1, max: 5}),
+        categoryId: faker.random.number({min: 1, max: 3})
       })
     }
 
@@ -80,10 +82,11 @@ async function seed() {
         return await User.create(ele)
       })
     )
-    // Create each of the pictures within the database
-    const pictures = await Promise.all(
-      dummyPictures.map(async ele => {
-        await PictureList.create(ele)
+
+    // Create each of the artists within the database
+    const artist = await Promise.all(
+      dummyArtists.map(async ele => {
+        await Artist.create(ele)
       })
     )
 
@@ -94,10 +97,10 @@ async function seed() {
       })
     )
 
-    // Create each of the artists within the database
-    const artist = await Promise.all(
-      dummyArtists.map(async ele => {
-        await Artist.create(ele)
+    // Create each of the pictures within the database
+    const pictures = await Promise.all(
+      dummyPictures.map(async ele => {
+        await PictureList.create(ele)
       })
     )
 
