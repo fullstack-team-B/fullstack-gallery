@@ -43,7 +43,10 @@ module.exports = User
  * instanceMethods
  */
 User.prototype.correctPassword = function(candidatePwd) {
-  return User.encryptPassword(candidatePwd, this.salt()) === this.password()
+  console.log('encrytedPassword: ', candidatePwd)
+  console.log('Password: ', this.password())
+  // return User.encryptPassword(candidatePwd, this.salt()) === this.password()
+  return candidatePwd === this.password()
 }
 
 /**
