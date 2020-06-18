@@ -95,13 +95,6 @@ p.shop {
   flex-direction: column;
 }
 
-.pictures {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-}
-
 div.square {
   padding-top: 10px;
 }
@@ -115,4 +108,15 @@ div.square {
   justify-content: space-around;
   padding-top: 20px;
   margin: auto;
+}
+.picture-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+#pictureImg {
+  height: 210px;
+  width: 200px;
 }
