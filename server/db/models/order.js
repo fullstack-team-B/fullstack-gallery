@@ -17,6 +17,13 @@ const Order = db.define('order', {
   completed: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
+  },
+  paymentUsed: {
+    type: Sequelize.STRING,
+    defaultValue: null
+  },
+  price: {
+    type: Sequelize.INTEGER
   }
 })
 

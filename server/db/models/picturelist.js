@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const PictureList = db.define('pictureList', {
+const PictureList = db.define('picturelist', {
   name: {
     type: Sequelize.STRING,
     allowNull: false
@@ -16,6 +16,11 @@ const PictureList = db.define('pictureList', {
   },
   description: {
     type: Sequelize.TEXT,
+    allowNull: false
+  },
+  quantity: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
     allowNull: false
   }
 })
