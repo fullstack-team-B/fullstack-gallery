@@ -27,7 +27,9 @@ router.get('/:userId', async (req, res, next) => {
       const users = await User.findAll({
         attributes: ['id', 'firstName', 'lastName', 'email', 'admin']
       })
+      const pictures = await Pictures.findAll()
       user.users = users
+      user.pictures = pictures
     }
     res.json(user)
   } catch (error) {
