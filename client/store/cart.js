@@ -13,7 +13,6 @@ const addItem = item => ({
 // Thunk creator
 export const gotItem = id => async dispatch => {
   const {data} = await axios.get(`/api/pictures/${id}`)
-
   dispatch(addItem(data))
 }
 
