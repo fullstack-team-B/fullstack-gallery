@@ -28,7 +28,7 @@ export const fetchPicture = pictureId => {
 }
 
 // Initial State
-const initialState = [{name: '', pictureImg: '', description: '', price: 0}]
+const initialState = []
 
 export default function picturesReducer(state = initialState, action) {
   switch (action.type) {
