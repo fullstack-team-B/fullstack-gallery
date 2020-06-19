@@ -10,18 +10,22 @@ const addItem = item => ({
   item
 })
 
+// Thunk creator
 export const gotItem = id => async dispatch => {
   const {data} = await axios.get(`/api/pictures/${id}`)
 
   dispatch(addItem(data))
 }
 
-const initialState = []
+const initialState = {}
 
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ITEM:
-      return [...state, action.item]
+      state[action.item.id]
+        ? state[action.item.id].quantity++
+        : (action.item.quantity = 1)
+      return {...state, [action.item.id]: action.item}
     default:
       return state
   }
