@@ -24,6 +24,7 @@ export class Shop extends React.Component {
                   <h3 id="pictureName">{picture.name}</h3>
                   <h3 id="picturePrice">{picture.price}</h3>
                   <p id="pictureDescription">{picture.description}</p>
+                  <Link to={`/shop/picture/${picture.id}`}>More Info</Link>
                 </div>
               </li>
             )

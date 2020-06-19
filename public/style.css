@@ -109,6 +109,7 @@ div.square {
   padding-top: 20px;
   margin: auto;
 }
+
 .picture-container {
   display: flex;
   flex-direction: row;
