@@ -11,8 +11,8 @@ export class SingleProduct extends React.Component {
     this.props.fetchPicture(pictureId)
   }
 
-  addToCart = pictureId => {
-    this.props.gotItem(pictureId)
+  addToCart = item => {
+    this.props.gotItem(item)
   }
 
   render() {
@@ -23,7 +23,7 @@ export class SingleProduct extends React.Component {
         <h2>{picture.name}</h2>
         <img id="pictureImg" src={picture.imageUrl} />
         <p>{picture.description}</p>
-        <button type="button" onClick={() => this.addToCart(picture.id)}>
+        <button type="button" onClick={() => this.addToCart(picture)}>
           Add To Cart
         </button>
       </div>
