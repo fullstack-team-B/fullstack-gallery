@@ -8,7 +8,7 @@ router.get('/', async (req, res, next) => {
       // explicitly select only the id and email fields - even though
       // users' passwords are encrypted, it won't help if we just
       // send everything to anyone who asks!
-      attributes: ['id', 'email']
+      attributes: ['id', 'firstName', 'lastName', 'email']
     })
     res.json(users)
   } catch (err) {
@@ -16,11 +16,33 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.post('/', async(req, res, next)=>{
+router.get('/:userId', async (req, res, next) => {
   try {
-    const newUser = await User.create(req.body)
+    const {admin} = req.user.dataValues
+    const {userId} = req.params
 
-    if(newUser){
+    const user = await User.findByPk(userId)
+
+    if (admin) {
+      const users = await User.findAll({
+        attributes: ['id', 'firstName', 'lastName', 'email', 'admin']
+      })
+      const pictures = await Pictures.findAll()
+      user.users = users
+      user.pictures = pictures
+    }
+    res.json(user)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/', async (req, res, next) => {
+  const {firstName, lastName, email, password} = req.body
+  try {
+    const newUser = await User.create({firstName, lastName, email, password})
+
+    if (newUser) {
       res.status(200).json(newUser)
     }
   } catch (error) {
