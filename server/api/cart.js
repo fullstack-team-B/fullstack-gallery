@@ -1,25 +1,36 @@
 const router = require('express').Router()
-const {OrderDetail, Order, PictureList} = require('../db/models')
+const {Order, OrderQuantity, PictureList} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
-    console.log(Order.prototype)
-    res.json('type')
+    //get all pictures and quantity currently in the cart
+
+    const order = await Order.findOne({
+      where: {
+        //hard-coded for testing
+        userId: 7,
+        // userId: req.params.id
+        completed: false
+      },
+      include: [{model: PictureList}]
+    })
+
+    res.json(order)
   } catch (error) {
     next(error)
   }
 })
 
-router.post('/', async (req, res, next) => {
-  try {
-    const picture = req.body
-    await Order.prototype.addPictureList(newPicture)
+// router.post('/', async (req, res, next) => {
+//   try {
+//     const picture = req.body
+//     await Order.prototype.addPictureList(newPicture)
 
-    res.status(201).json('Created')
-  } catch (error) {
-    next(error)
-  }
-})
+//     res.status(201).json('Created')
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 // router.delete('/', async (req, res, next) => {})
 
