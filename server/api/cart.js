@@ -21,16 +21,21 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// router.post('/', async (req, res, next) => {
-//   try {
-//     const picture = req.body
-//     await Order.prototype.addPictureList(newPicture)
+router.post('/', async (req, res, next) => {
+  try {
+    // const newPictureId = req.body.id
 
-//     res.status(201).json('Created')
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+    await OrderQuantity.create({
+      picturelistId: 1,
+      orderId: 3,
+      quantity: 1
+    })
+
+    res.status(201).json(order)
+  } catch (error) {
+    next(error)
+  }
+})
 
 // router.delete('/', async (req, res, next) => {})
 
