@@ -73,7 +73,7 @@ export class UserAccount extends React.Component {
                     </div>
                     <div>
                       <button>Edit</button>
-                      <button onClick={() => this.removedUser(user.id)}>
+                      <button onClick={() => this.removedPicture(picture.id)}>
                         Delete
                       </button>
                     </div>
@@ -117,7 +117,7 @@ const mapState = state => {
 const mapDispatch = dispatch => ({
   fetchAllInfo: () => dispatch(fetchAllInfo()),
   removedUser: userId => dispatch(removedUser(userId)),
-  removedPicture: () => dispatch(removedPicture(pictureId))
+  removedPicture: pictureId => dispatch(removedPicture(pictureId))
 })
 
 export default connect(mapState, mapDispatch)(UserAccount)
