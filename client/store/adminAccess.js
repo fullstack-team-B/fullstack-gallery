@@ -4,8 +4,11 @@ import axios from 'axios'
  * ACTION TYPES
  */
 const ALL_INFO = 'ALL_INFO'
+
 const REMOVE_USER = 'REMOVE_USER'
 const REMOVE_PICTURE = 'REMOVE_PICTURE'
+
+const UPDATE_PICTURE = 'UPDATE_PICTURE'
 
 /**
  * INITIAL STATE
@@ -34,6 +37,12 @@ const removePicture = pictureId => ({
   pictureId
 })
 
+const updatePicture = (pictureId, picture) => ({
+  type: UPDATE_PICTURE,
+  pictureId,
+  picture
+})
+
 export const fetchAllInfo = () => async dispatch => {
   try {
     const users = await axios.get('/api/users')
@@ -41,7 +50,7 @@ export const fetchAllInfo = () => async dispatch => {
 
     dispatch(getAllInfo(users.data, pictures.data))
   } catch (error) {
-    console.log('Something went wrong')
+    console.log('Could not fetch all info')
   }
 }
 
@@ -58,7 +67,17 @@ export const removedPicture = pictureId => async dispatch => {
     await axios.delete(`/api/pictures/${pictureId}`)
     dispatch(removePicture(pictureId))
   } catch (error) {
-    console.log('Something went wrong')
+    console.log('Did not delete')
+  }
+}
+
+// In the middle of creating a updating thunk
+export const updatedPicture = (pictureId, picture) => async dispatch => {
+  try {
+    await axios.put(`/api/pictures/${pictureId}`, picture)
+    dispatch(updatePicture(pictureId, picture))
+  } catch (error) {
+    console.log('did not update')
   }
 }
 
@@ -70,10 +89,12 @@ export default function(state = adminAccess, action) {
       const updatedUser = state.users.filter(user => user.id !== action.userId)
       return {...state, users: updatedUser}
     case REMOVE_PICTURE:
-      const updatedPicture = state.pictures.filter(
+      const pictures = state.pictures.filter(
         picture => picture.id !== action.pictureId
       )
-      return {...state, pictures: updatedPicture}
+      return {...state, pictures: pictures}
+    case UPDATE_PICTURE:
+      return {...state, pictures: action.pictures}
     default:
       return state
   }
