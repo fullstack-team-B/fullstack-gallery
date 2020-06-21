@@ -59,7 +59,7 @@ router.delete('/:userId', async (req, res, next) => {
       }
     })
 
-    req.sendStatus(204)
+    res.status(204).json('deleted user from database')
   } catch (error) {
     next(error)
   }

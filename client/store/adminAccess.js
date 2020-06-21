@@ -30,7 +30,7 @@ const removeUser = userId => ({
 })
 
 const removePicture = pictureId => ({
-  type: REMOVE_Picture,
+  type: REMOVE_PICTURE,
   pictureId
 })
 
@@ -50,12 +50,12 @@ export const removedUser = userId => async dispatch => {
     await axios.delete(`/api/users/${userId}`)
     dispatch(removeUser(userId))
   } catch (error) {
-    console.log('Something went wrong')
+    console.log(error)
   }
 }
 export const removedPicture = pictureId => async dispatch => {
   try {
-    await axios.delete(`/api/Pictures/${pictureId}`)
+    await axios.delete(`/api/pictures/${pictureId}`)
     dispatch(removePicture(pictureId))
   } catch (error) {
     console.log('Something went wrong')
@@ -67,13 +67,13 @@ export default function(state = adminAccess, action) {
     case ALL_INFO:
       return {...state, users: action.users, pictures: action.pictures}
     case REMOVE_USER:
-      const updatedUser = state.user.filter(user => user.id !== action.userId)
+      const updatedUser = state.users.filter(user => user.id !== action.userId)
       return {...state, users: updatedUser}
     case REMOVE_PICTURE:
-      const updatedPicture = state.picture.filter(
+      const updatedPicture = state.pictures.filter(
         picture => picture.id !== action.pictureId
       )
-      return {...state, users: updatedPicture}
+      return {...state, pictures: updatedPicture}
     default:
       return state
   }
