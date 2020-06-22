@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+const {User, PictureList} = require('../db/models')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
@@ -18,16 +18,16 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:userId', async (req, res, next) => {
   try {
-    const {admin} = req.user.dataValues
     const {userId} = req.params
 
     const user = await User.findByPk(userId)
+    const {admin} = user.dataValues
 
     if (admin) {
       const users = await User.findAll({
         attributes: ['id', 'firstName', 'lastName', 'email', 'admin']
       })
-      const pictures = await Pictures.findAll()
+      const pictures = await PictureList.findAll()
       user.users = users
       user.pictures = pictures
     }
@@ -45,6 +45,21 @@ router.post('/', async (req, res, next) => {
     if (newUser) {
       res.status(200).json(newUser)
     }
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.delete('/:userId', async (req, res, next) => {
+  try {
+    const userId = req.params.userId
+    await User.destroy({
+      where: {
+        id: userId
+      }
+    })
+
+    res.status(204).json('deleted user from database')
   } catch (error) {
     next(error)
   }
