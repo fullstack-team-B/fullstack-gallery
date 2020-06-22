@@ -41,8 +41,6 @@ Incoming JSON data
   try {
     const {userId, picturelistId, orderId, quantity, cartExist} = req.body
 
-    // Sequelize method FIND OR CREATE
-
     if (!cartExist) {
       // Creates a new order with the associated user ID
       const newOrder = await Order.create({
