@@ -63,7 +63,7 @@ export const clearedCart = () => /*async*/ dispatch => {
   dispatch(clearCart())
 }
 
-const initialState = {cart: null}
+const initialState = {}
 
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -82,7 +82,7 @@ const cartReducer = (state = initialState, action) => {
     case CLEAR_CART:
       return initialState
     case GET_CART:
-      return {cart: action.state}
+      return {...state, ...action.cart}
     default:
       return state
   }
