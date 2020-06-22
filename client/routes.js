@@ -21,13 +21,10 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
+        <Route path="/" component={Shop} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route
-          exact
-          path="/shop/picture/:pictureId"
-          component={SingleProduct}
-        />
+        <Route path="/shop/picture/:pictureId" component={SingleProduct} />
         {/* Shop All Component */}
         <Route path="/shop" component={Shop} />
         {isLoggedIn && (
@@ -36,8 +33,6 @@ class Routes extends Component {
             <Route exact path="/account" component={UserAccount} />
           </Switch>
         )}
-        {/* Displays our Login component as a fallback */}
-        <Route component={Shop} />
       </Switch>
     )
   }
