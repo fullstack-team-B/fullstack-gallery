@@ -38,6 +38,7 @@ export class Shop extends React.Component {
 const mapState = state => {
   return {
     pictures: state.pictures
+    // userId: state.user.id
   }
 }
 

@@ -1,11 +1,13 @@
 import axios from 'axios'
 import history from '../history'
+// import {noExtendLeft} from 'sequelize/types/lib/operators'
 
 /**
  * ACTION TYPES
  */
 const GET_USER = 'GET_USER'
 const REMOVE_USER = 'REMOVE_USER'
+const GET_CART = 'GET_CART'
 
 /**
  * INITIAL STATE
@@ -17,6 +19,7 @@ const defaultUser = {}
  */
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
+const getCart = cart => ({type: GET_CART, cart})
 
 /**
  * THUNK CREATORS
@@ -25,6 +28,10 @@ export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
     dispatch(getUser(res.data || defaultUser))
+    // Action creator to load up existing cart for user on landing when already logged in
+    const userId = res.data.id
+    const existingCart = await axios.get(`/api/cart/${userId}`)
+    dispatch(getCart(existingCart.data))
   } catch (err) {
     console.error(err)
   }
@@ -70,6 +77,10 @@ export const auth = (email, password, method) => async dispatch => {
 
   try {
     dispatch(getUser(res.data))
+    // Action creator to load up existing cart when logging in for the 1st time
+    const userId = res.data.id
+    const existingCart = await axios.get(`/api/cart/${userId}`)
+    dispatch(getCart(existingCart.data))
     history.push('/shop')
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr)
@@ -86,6 +97,16 @@ export const logout = () => async dispatch => {
   }
 }
 
+// In case we need this!
+export const gotCart = userId => async dispatch => {
+  try {
+    const existingCart = await axios.get(`/api/cart/${userId}`)
+    dispatch(getCart(existingCart))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 /**
  * REDUCER
  */
@@ -95,6 +116,8 @@ export default function(state = defaultUser, action) {
       return action.user
     case REMOVE_USER:
       return defaultUser
+    case GET_CART:
+      return {...state, existCart: action.cart}
     default:
       return state
   }
