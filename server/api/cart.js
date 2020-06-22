@@ -1,11 +1,11 @@
 const router = require('express').Router()
 const {Order, OrderQuantity, PictureList} = require('../db/models')
 
-router.get('/', async (req, res, next) => {
+router.get('/:userId', async (req, res, next) => {
   try {
     //get all pictures and quantity currently in the cart
 
-    const {userId} = req.body
+    const userId = req.params.userId
 
     const order = await Order.findOne({
       where: {
