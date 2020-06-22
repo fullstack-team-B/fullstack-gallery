@@ -121,3 +121,14 @@ div.square {
   height: 210px;
   width: 200px;
 }
+
+.user-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-direction: row;
+}
+
+.user-detail {
+  border: 5px solid black;
+}
