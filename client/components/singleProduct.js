@@ -2,8 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {fetchPicture, addToCart} from '../store/shop'
-// ^change thunk to past tense for consistency
-import {gotItem} from '../store/cart'
 
 export class SingleProduct extends React.Component {
   componentDidMount() {
