@@ -13,7 +13,7 @@ export class SingleProduct extends React.Component {
     console.log(pictureId)
     this.props.addToCart(pictureId, this.props.userId)
   }
-
+  //
   render() {
     const picture = this.props.picture[0]
     console.log('Single Product Props: ', this.props)
