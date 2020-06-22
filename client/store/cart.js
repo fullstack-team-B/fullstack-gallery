@@ -65,7 +65,7 @@ const cartReducer = (state = initialState, action) => {
     case REMOVE_ITEM:
       delete state[action.id]
       return {...state}
-    case clearCart:
+    case CLEAR_CART:
       return initialState
     default:
       return state
