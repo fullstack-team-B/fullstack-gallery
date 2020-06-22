@@ -5,10 +5,12 @@ router.get('/', async (req, res, next) => {
   try {
     //get all pictures and quantity currently in the cart
 
+    const {userId} = req.body
+
     const order = await Order.findOne({
       where: {
         //hard-coded for testing
-        userId: 7,
+        userId: userId,
         // userId: req.params.id
         completed: false
       },
@@ -21,21 +23,74 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+// Post Request to Add item into cart and create a new Order
 router.post('/', async (req, res, next) => {
+  /* 
+
+Incoming JSON data
+{
+  "userId": 1
+	"cartExist": true,  || Front-end component will always send this data
+	"picturelistId": 6,   || Depending on what is being added or updated, this will be included
+	"orderId": 16,  || OrderId will always contain order ID number
+	"quantity": 25  || Front end will keep track of the quantity of items inside a cart/order
+}
+
+*/
+
   try {
-    // const newPictureId = req.body.id
+    const {userId, picturelistId, orderId, quantity, cartExist} = req.body
 
-    await OrderQuantity.create({
-      picturelistId: 1,
-      orderId: 3,
-      quantity: 1
-    })
+    if (!cartExist) {
+      // Creates a new order with the associated user ID
+      const newOrder = await Order.create({
+        userId: userId
+      })
 
-    res.status(201).json(order)
+      await OrderQuantity.create({
+        picturelistId: picturelistId,
+        orderId: newOrder.id,
+        quantity: quantity
+      })
+    } else {
+      //  Add a new item to existing order
+      await OrderQuantity.create({
+        picturelistId: picturelistId,
+        orderId: orderId,
+        quantity: quantity
+      })
+    }
+
+    res.status(201).json('newOrder')
   } catch (error) {
     next(error)
   }
 })
+
+router.put('/', async (req, res, next) => {
+  try {
+    const {userId, picturelistId, orderId, quantity, cartExist} = req.body
+
+    await OrderQuantity.update(
+      {
+        quantity: quantity
+      },
+      {
+        where: {orderId: orderId, picturelistId: picturelistId}
+      }
+    )
+
+    res.json('Updated')
+  } catch (error) {
+    next(error)
+  }
+})
+
+// DELETE route for removing a single item for a user
+router.delete('/', (req, res, next) => {})
+
+// POST route for submitting an order
+router.post('/submit', (req, res, next) => {})
 
 // router.delete('/', async (req, res, next) => {})
 

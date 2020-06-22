@@ -9,12 +9,15 @@ export class SingleProduct extends React.Component {
     this.props.fetchPicture(pictureId)
   }
 
-  addToCart = pictureId => {}
+  addToCart = pictureId => {
+    console.log(pictureId)
+  }
 
   render() {
     const picture = this.props.picture[0]
-    console.log(this.props)
-    return (
+    console.log('Single Product Props: ', this.props)
+
+    return picture ? (
       <div>
         <h2>{picture.name}</h2>
         <img id="pictureImg" src={picture.imageUrl} />
@@ -23,6 +26,8 @@ export class SingleProduct extends React.Component {
           Add To Cart
         </button>
       </div>
+    ) : (
+      <h1> Loading </h1>
     )
   }
 }
