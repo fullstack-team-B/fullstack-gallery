@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {fetchPicture} from '../store/shop'
+import {fetchPicture, addToCart} from '../store/shop'
 
 export class SingleProduct extends React.Component {
   componentDidMount() {
@@ -9,8 +9,9 @@ export class SingleProduct extends React.Component {
     this.props.fetchPicture(pictureId)
   }
 
-  addToCart = pictureId => {
+  handleAddToCart = pictureId => {
     console.log(pictureId)
+    this.props.addToCart(pictureId, this.props.userId)
   }
 
   render() {
@@ -22,7 +23,7 @@ export class SingleProduct extends React.Component {
         <h2>{picture.name}</h2>
         <img id="pictureImg" src={picture.imageUrl} />
         <p>{picture.description}</p>
-        <button type="button" onClick={() => this.addToCart(picture.id)}>
+        <button type="button" onClick={() => this.handleAddToCart(picture.id)}>
           Add To Cart
         </button>
       </div>
@@ -34,13 +35,15 @@ export class SingleProduct extends React.Component {
 
 const mapState = state => {
   return {
-    picture: state.pictures
+    picture: state.pictures,
+    userId: state.user.id
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    fetchPicture: pictureId => dispatch(fetchPicture(pictureId))
+    fetchPicture: pictureId => dispatch(fetchPicture(pictureId)),
+    addToCart: (pictureId, userId) => dispatch(addToCart(pictureId, userId))
   }
 }
 
