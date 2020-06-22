@@ -2,6 +2,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {fetchPicture} from '../store/shop'
+// ^change thunk to past tense for consistency
+import {gotItem} from '../store/cart'
 
 export class SingleProduct extends React.Component {
   componentDidMount() {
@@ -9,7 +11,9 @@ export class SingleProduct extends React.Component {
     this.props.fetchPicture(pictureId)
   }
 
-  addToCart = pictureId => {}
+  addToCart = item => {
+    this.props.gotItem(item)
+  }
 
   render() {
     const picture = this.props.picture[0]
@@ -19,7 +23,7 @@ export class SingleProduct extends React.Component {
         <h2>{picture.name}</h2>
         <img id="pictureImg" src={picture.imageUrl} />
         <p>{picture.description}</p>
-        <button type="button" onClick={() => this.addToCart(picture.id)}>
+        <button type="button" onClick={() => this.addToCart(picture)}>
           Add To Cart
         </button>
       </div>
@@ -35,7 +39,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    fetchPicture: pictureId => dispatch(fetchPicture(pictureId))
+    fetchPicture: pictureId => dispatch(fetchPicture(pictureId)),
+    gotItem: pictureId => dispatch(gotItem(pictureId))
   }
 }
 
