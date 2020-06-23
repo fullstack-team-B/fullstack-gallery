@@ -25,7 +25,7 @@ const removeItem = id => ({
 })
 
 const clearCart = () => ({
-  type: CLEAR_CART,
+  type: CLEAR_CART
 })
 
 const getCart = cart => ({type: GET_CART, cart})
