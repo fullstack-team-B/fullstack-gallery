@@ -3,11 +3,10 @@ import history from '../history'
 
 // Action types
 const ADD_ITEM = 'ADD_ITEM'
-const MODIFY_QUANTITY = 'MODIFY_QUANTITY'
+const UPDATED_QUANTITY = 'UPDATED_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
 const CLEAR_CART = 'CLEAR_CART'
 const GET_CART = 'GET_CART'
-// const UPDATED_QUANTITY = 'UPDATED_QUANTITY'
 
 // Action creators
 const addItem = item => ({
@@ -15,15 +14,9 @@ const addItem = item => ({
   item
 })
 
-// const updatedQuantity = (cart) => ({
-//   type: UPDATED_QUANTITY,
-//   cart,
-// })
-
-const modifyQuantity = (id, quantity) => ({
-  type: MODIFY_QUANTITY,
-  id,
-  quantity
+const updatedQuantity = cart => ({
+  type: UPDATED_QUANTITY,
+  cart
 })
 
 const removeItem = id => ({
@@ -53,20 +46,29 @@ export const gotCart = userId => async dispatch => {
   }
 }
 
-export const modifiedQuantity = (id, quantity) => /*async*/ dispatch => {
-  // Insert axios request here to update the orderQuantities table with new quantity for the specific item
-
-  dispatch(modifyQuantity(id, quantity))
+export const increaseQuantity = (
+  userId,
+  orderId,
+  pictureId
+) => async dispatch => {
+  const {data} = await axios.put(`/api/cart/${userId}/increase`, {
+    orderId: orderId,
+    pictureId: pictureId
+  })
+  dispatch(updatedQuantity(data))
 }
-// export const increaseQuantity = (id) => async (dispatch) => {
-//   const {data} = await axios.put(`/api/cart/${id}/increase`)
-//   dispatch(updatedQuantity(data))
-// }
 
-// export const decreaseQuantity = (id) => async (dispatch) => {
-//   const {data} = await axios.put(`/api/cart/${id}/decrease`)
-//   dispatch(updatedQuantity(data))
-// }
+export const decreaseQuantity = (
+  userId,
+  orderId,
+  pictureId
+) => async dispatch => {
+  const {data} = await axios.put(`/api/cart/${userId}/decrease`, {
+    orderId: orderId,
+    pictureId: pictureId
+  })
+  dispatch(updatedQuantity(data))
+}
 
 export const removedItem = id => /*async*/ dispatch => {
   // Axios request here to delete the specific item-row from orderQuantities table
@@ -87,10 +89,10 @@ const cartReducer = (state = initialState, action) => {
         ? (state[action.item.id].quantity = state[action.item.id].quantity + 1)
         : (action.item.quantity = 1)
       return {...state, [action.item.id]: action.item}
-    case MODIFY_QUANTITY:
-      // API route will return a new state
-      state[action.id].quantity = action.quantity
-      return {...state}
+    case UPDATED_QUANTITY:
+    // console.log(state)
+    // Needs to update the cart
+    // return {...state, cart: action.cart}
     case REMOVE_ITEM:
       delete state[action.id]
       return {...state}
@@ -98,8 +100,6 @@ const cartReducer = (state = initialState, action) => {
       return initialState
     case GET_CART:
       return {...action.cart}
-    // case UPDATED_QUANTITY:
-    //   return {...state, singleCandy: action.candy}
     default:
       return state
   }
