@@ -9,11 +9,6 @@ export class SingleProduct extends React.Component {
     this.props.fetchPicture(pictureId)
   }
 
-  // handleAddToCart = pictureId => {
-  //   console.log(pictureId)
-  //   this.props.addToCart(pictureId, this.props.userId)
-  // }
-
   render() {
     const picture = this.props.picture[0]
 
@@ -24,8 +19,7 @@ export class SingleProduct extends React.Component {
         <p>{picture.description}</p>
         <button
           type="button"
-          onClick={() => this.props.gotItem(picture, this.props.userId)}
-        >
+          onClick={() => this.props.gotItem(picture, this.props.userId)}>
           Add To Cart
         </button>
       </div>
@@ -45,7 +39,6 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     fetchPicture: pictureId => dispatch(fetchPicture(pictureId)),
-    // addToCart: (pictureId, userId) => dispatch(addToCart(pictureId, userId)),
     gotItem: (item, userId) => dispatch(gotItem(item, userId))
   }
 }
