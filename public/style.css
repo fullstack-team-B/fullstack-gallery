@@ -4,7 +4,7 @@
   padding: 0;
 }
 body {
-  background-color: #ffa69e;
+  background-color: AliceBlue;
 }
 body #nav_bar {
   background-color: #262626;
@@ -33,7 +33,7 @@ a {
   margin-right: auto;
 }
 
-p.shop_name {
+h1.shop_name {
   font-size: 30px;
   color: #edf0f1;
   margin-right: 30%;
@@ -45,16 +45,16 @@ p.shop_name {
   list-style: none;
 }
 
-.nav_links li {
+.nav_links div {
   display: inline-block;
   padding: 0px 20px;
 }
 
-.nav_links li a {
+.nav_links div .account .shop .cart {
   transition: all 0.3s ease 0s;
 }
 
-.nav_links li a.shop:hover {
+.nav_links div a.shop:hover {
   color: #0088a9;
 }
 

@@ -2,47 +2,96 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {signup} from '../store'
+import TextField from '@material-ui/core/TextField'
+import {makeStyles} from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import Container from '@material-ui/core/Container'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Typography from '@material-ui/core/Typography'
 
+const useStyles = makeStyles(theme => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2)
+  }
+}))
 /**
  * COMPONENT
  */
 const SignupForm = props => {
   const {name, displayName, handleSubmit, error} = props
-
+  const classes = useStyles()
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <label htmlFor="firstName">
-            <small>First Name</small>
-          </label>
-          <input name="firstName" type="text" />
-        </div>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Typography
+        align="center"
+        component="h1"
+        variant="h5"
+        style={{padding: 20}}
+      >
+        Sign up
+      </Typography>
 
-        <div>
-          <label htmlFor="lastName">
-            <small>Last Name</small>
-          </label>
-          <input name="lastName" type="text" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
+      <form className={classes.form}>
+        <TextField
+          id="standard-basic"
+          label="First Name"
+          type="text"
+          variant="outlined"
+          margin="normal"
+          fullWidth
+        />
+        <TextField
+          id="standard-basic"
+          label="Last Name"
+          type="text"
+          variant="outlined"
+          margin="normal"
+          fullWidth
+        />
+        <TextField
+          id="email"
+          label="Email Address"
+          type="text"
+          variant="outlined"
+          margin="normal"
+          fullWidth
+        />
+        <TextField
+          id="password"
+          fullWidth
+          label="Password"
+          type="password"
+          variant="outlined"
+          margin="normal"
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          type="submit"
+          className={classes.submit}
+        >
+          {displayName}
+        </Button>
+
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-    </div>
+    </Container>
   )
 }
 

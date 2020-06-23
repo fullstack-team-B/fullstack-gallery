@@ -19,7 +19,8 @@ export class SingleProduct extends React.Component {
         <p>{picture.description}</p>
         <button
           type="button"
-          onClick={() => this.props.gotItem(picture, this.props.userId)}>
+          onClick={() => this.props.gotItem(picture, this.props.userId)}
+        >
           Add To Cart
         </button>
       </div>

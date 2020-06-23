@@ -160,7 +160,7 @@ router.post('/submit', (req, res, next) => {})
 
 // Delete the current card(order) for the user
 router.delete('/clearCart', async (req, res, next) => {
-  try{
+  try {
     await Order.destroy({
       where: {
         userId: req.body.userId,
@@ -168,9 +168,10 @@ router.delete('/clearCart', async (req, res, next) => {
       }
     })
 
-    res.sendStatus(204);
+    res.sendStatus(204)
   } catch (err) {
-    next (err)
+    next(err)
+  }
 })
 
 module.exports = router
