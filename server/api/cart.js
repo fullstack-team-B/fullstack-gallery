@@ -25,7 +25,7 @@ router.get('/:userId', async (req, res, next) => {
 
 // Post Request to Add item into cart and create a new Order
 router.post('/', async (req, res, next) => {
-  /* 
+  /*
 
 Incoming JSON data
 {
@@ -95,6 +95,28 @@ router.put('/', async (req, res, next) => {
     next(error)
   }
 })
+
+// router.put('/:id/increase', async (req, res, next) => {
+//   try {
+//     let candy = await Candy.findById(req.params.id)
+//     candy.quantity++
+//     await candy.save()
+//     res.json(candy)
+//   } catch (err) {
+//     next(err)
+//   }
+// })
+
+// router.put('/:id/decrease', async (req, res, next) => {
+//   try {
+//     let candy = await Candy.findById(req.params.id)
+//     candy.quantity--
+//     await candy.save()
+//     res.json(candy)
+//   } catch (err) {
+//     next(err)
+//   }
+// })
 
 // DELETE route for removing a single item for a user
 router.delete('/', (req, res, next) => {})

@@ -14,6 +14,16 @@ export class Cart extends React.Component {
     // Check if user is logged in before retrieving existing cart
     if (this.props.isLoggedIn) this.props.getCart(this.props.userId)
   }
+  //To increase quantity
+  //  increase() {
+  //    this.props.increaseQuantity(this.props.match.params.id)
+  //  }
+
+  //To decrease quantity
+
+  //  decrease() {
+  //    this.props.decreaseQuantity(this.props.match.params.id)
+  //  }
 
   render() {
     const currCart = this.props.cart
@@ -31,6 +41,8 @@ export class Cart extends React.Component {
                 <h2>Product Name: {ele.name}</h2>
                 <h2>Quantity: {ele.orderquantity.quantity}</h2>
                 <h3>Price: {ele.price}</h3>
+                <button /*onClick={this.decrease}*/>Increase</button>
+                <button /*onClick={this.decrease}*/>Decrease</button>
               </div>
             )
           })}
@@ -53,6 +65,8 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     getCart: userId => dispatch(gotCart(userId))
+    // increaseQuantity: (id) => dispatch(increaseQuantity(id)),
+    // decreaseQuantity: (id) => dispatch(decreaseQuantity(id)),
   }
 }
 

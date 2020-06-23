@@ -7,12 +7,18 @@ const MODIFY_QUANTITY = 'MODIFY_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
 const CLEAR_CART = 'CLEAR_CART'
 const GET_CART = 'GET_CART'
+// const UPDATED_QUANTITY = 'UPDATED_QUANTITY'
 
 // Action creators
 const addItem = item => ({
   type: ADD_ITEM,
   item
 })
+
+// const updatedQuantity = (cart) => ({
+//   type: UPDATED_QUANTITY,
+//   cart,
+// })
 
 const modifyQuantity = (id, quantity) => ({
   type: MODIFY_QUANTITY,
@@ -52,6 +58,15 @@ export const modifiedQuantity = (id, quantity) => /*async*/ dispatch => {
 
   dispatch(modifyQuantity(id, quantity))
 }
+// export const increaseQuantity = (id) => async (dispatch) => {
+//   const {data} = await axios.put(`/api/cart/${id}/increase`)
+//   dispatch(updatedQuantity(data))
+// }
+
+// export const decreaseQuantity = (id) => async (dispatch) => {
+//   const {data} = await axios.put(`/api/cart/${id}/decrease`)
+//   dispatch(updatedQuantity(data))
+// }
 
 export const removedItem = id => /*async*/ dispatch => {
   // Axios request here to delete the specific item-row from orderQuantities table
@@ -83,6 +98,8 @@ const cartReducer = (state = initialState, action) => {
       return initialState
     case GET_CART:
       return {...action.cart}
+    // case UPDATED_QUANTITY:
+    //   return {...state, singleCandy: action.candy}
     default:
       return state
   }
