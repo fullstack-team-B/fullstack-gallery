@@ -32,9 +32,14 @@ const clearCart = () => ({
 const getCart = cart => ({type: GET_CART, cart})
 
 // Thunk creators
-export const gotItem = item => /*async*/ dispatch => {
+export const gotItem = (item, userId) => async dispatch => {
+  const picturelistId = item.id
   // const {data} = await axios.get(`/api/pictures/${id}`);
   // Insert axios request w/ relevant route info for adding to orderQuantites table
+  await axios.post(`/api/cart`, {
+    picturelistId,
+    userId
+  })
   dispatch(addItem(item))
 }
 
