@@ -96,17 +96,6 @@ export const logout = () => async dispatch => {
     console.error(err)
   }
 }
-
-// In case we need this!
-export const gotCart = userId => async dispatch => {
-  try {
-    const existingCart = await axios.get(`/api/cart/${userId}`)
-    dispatch(getCart(existingCart))
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 /**
  * REDUCER
  */

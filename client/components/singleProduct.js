@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+// import {Link} from 'react-router-dom'
 import {fetchPicture, addToCart} from '../store/shop'
 
 export class SingleProduct extends React.Component {
@@ -13,7 +13,7 @@ export class SingleProduct extends React.Component {
     console.log(pictureId)
     this.props.addToCart(pictureId, this.props.userId)
   }
-
+  //
   render() {
     const picture = this.props.picture[0]
     console.log('Single Product Props: ', this.props)
