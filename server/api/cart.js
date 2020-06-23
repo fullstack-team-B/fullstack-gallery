@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {Order, OrderQuantity, PictureList} = require('../db/models')
+const db = require('../db/db')
 
 router.get('/:userId', async (req, res, next) => {
   try {
@@ -25,7 +26,7 @@ router.get('/:userId', async (req, res, next) => {
 
 // Post Request to Add item into cart and create a new Order
 router.post('/', async (req, res, next) => {
-  /* 
+  /*
 
 Incoming JSON data
 {
@@ -80,22 +81,61 @@ Incoming JSON data
   }
 })
 
-router.put('/', async (req, res, next) => {
+router.put('/:userId/increase', async (req, res, next) => {
   try {
-    const {userId, picturelistId, orderId, quantity, cartExist} = req.body
+    const {orderId, pictureId} = req.body
 
-    await OrderQuantity.update(
-      {
-        quantity: quantity
-      },
-      {
-        where: {orderId: orderId, picturelistId: picturelistId}
+    let orderquantity = await OrderQuantity.findOne({
+      where: {
+        orderId: orderId,
+        picturelistId: pictureId
       }
-    )
+    })
 
-    res.json('Updated')
-  } catch (error) {
-    next(error)
+    let pictureItem = await PictureList.findOne({
+      where: {
+        id: pictureId
+      }
+    })
+
+    // orderquantity.quantity++
+    // Math to get increased price
+    // pictureItem.price = await orderquantity.save()
+    await pictureItem.save()
+
+    res.json(pictureItem)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.put('/:userId/decrease', async (req, res, next) => {
+  try {
+    const {orderId, pictureId} = req.body
+
+    let orderquantity = await OrderQuantity.findOne({
+      where: {
+        orderId: orderId,
+        picturelistId: pictureId
+      }
+    })
+
+    let pictureItem = await PictureList.findOne({
+      where: {
+        id: pictureId
+      }
+    })
+
+    // orderquantity.quantity--
+    // Math to get decrease price
+    // pictureItem.price =
+
+    await orderquantity.save()
+    // await pictureItem.save()
+
+    res.json(pictureItem)
+  } catch (err) {
+    next(err)
   }
 })
 

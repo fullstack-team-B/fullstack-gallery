@@ -3,7 +3,7 @@ import history from '../history'
 
 // Action types
 const ADD_ITEM = 'ADD_ITEM'
-const MODIFY_QUANTITY = 'MODIFY_QUANTITY'
+const UPDATED_QUANTITY = 'UPDATED_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
 const CLEAR_CART = 'CLEAR_CART'
 const GET_CART = 'GET_CART'
@@ -14,10 +14,9 @@ const addItem = item => ({
   item
 })
 
-const modifyQuantity = (id, quantity) => ({
-  type: MODIFY_QUANTITY,
-  id,
-  quantity
+const updatedQuantity = cart => ({
+  type: UPDATED_QUANTITY,
+  cart
 })
 
 const removeItem = id => ({
@@ -51,10 +50,28 @@ export const gotCart = userId => async dispatch => {
   }
 }
 
-export const modifiedQuantity = (id, quantity) => /*async*/ dispatch => {
-  // Insert axios request here to update the orderQuantities table with new quantity for the specific item
+export const increaseQuantity = (
+  userId,
+  orderId,
+  pictureId
+) => async dispatch => {
+  const {data} = await axios.put(`/api/cart/${userId}/increase`, {
+    orderId: orderId,
+    pictureId: pictureId
+  })
+  dispatch(updatedQuantity(data))
+}
 
-  dispatch(modifyQuantity(id, quantity))
+export const decreaseQuantity = (
+  userId,
+  orderId,
+  pictureId
+) => async dispatch => {
+  const {data} = await axios.put(`/api/cart/${userId}/decrease`, {
+    orderId: orderId,
+    pictureId: pictureId
+  })
+  dispatch(updatedQuantity(data))
 }
 
 export const removedItem = id => /*async*/ dispatch => {
@@ -76,10 +93,10 @@ const cartReducer = (state = initialState, action) => {
         ? (state[action.item.id].quantity = state[action.item.id].quantity + 1)
         : (action.item.quantity = 1)
       return {...state, [action.item.id]: action.item}
-    case MODIFY_QUANTITY:
-      // API route will return a new state
-      state[action.id].quantity = action.quantity
-      return {...state}
+    case UPDATED_QUANTITY:
+    // console.log(state)
+    // Needs to update the cart
+    // return {...state, cart: action.cart}
     case REMOVE_ITEM:
       delete state[action.id]
       return {...state}
