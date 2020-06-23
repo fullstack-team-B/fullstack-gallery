@@ -3,40 +3,73 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import {makeStyles} from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import {Toolbar} from '@material-ui/core'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
-  <div id="nav_bar">
-    <img className="logo" src="./favicon.ico" alt="logo" />
-    <h1 className="shop_name">Fullstack Gallery</h1>
-    <nav className="nav_links">
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          {/* <Link to="/home">Home</Link> */}
-          <Link className="account" to="/account">
-            Account
-          </Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-      <Link className="shop" to="/shop">
-        Shop
-      </Link>
-      <Link className="cart" to="/cart">
-        Cart
-      </Link>
-    </nav>
-    <hr />
-  </div>
-)
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 12
+  },
+
+  title: {
+    flexGrow: 1
+  }
+}))
+
+const Navbar = ({handleClick, isLoggedIn}) => {
+  const classes = useStyles()
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <img className="logo" src="./favicon.ico" alt="logo" />
+
+          <Typography variant="h4" className={classes.title}>
+            Fullstack Gallery
+          </Typography>
+
+          <nav className="nav_links">
+            {isLoggedIn ? (
+              <div>
+                {/* The navbar will show these links after you log in */}
+                <Link className="account" to="/account">
+                  Account
+                </Link>
+                <a href="#" onClick={handleClick}>
+                  Logout
+                </a>
+              </div>
+            ) : (
+              <div>
+                {/* The navbar will show these links before you log in */}
+                <Link to="/login">
+                  <Button color="inherit">Login</Button>
+                </Link>
+
+                <Link to="/signup">
+                  <Button color="inherit">Sign Up</Button>
+                </Link>
+              </div>
+            )}
+
+            <Link className="shop" to="/shop">
+              <Button color="inherit">Shop</Button>
+            </Link>
+
+            <Link className="cart" to="/cart">
+              <Button color="inherit">Cart</Button>
+            </Link>
+          </nav>
+          <hr />
+        </Toolbar>
+      </AppBar>
+    </div>
+  )
+}
 
 /**
  * CONTAINER
