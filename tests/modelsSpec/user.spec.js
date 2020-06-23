@@ -2,7 +2,7 @@ const {expect} = require('chai')
 const db = require('../../server/db/index')
 const User = db.model('user')
 
-describe('User model', async () => {
+xdescribe('User model', async () => {
   beforeEach(() => {
     return db.sync({force: true})
   })
@@ -22,7 +22,7 @@ describe('User model', async () => {
     return Promise.all([User.truncate({cascade: true})])
   })
 
-  xdescribe('Validation', () => {
+  describe('Validation', () => {
     it('includes `firstName`, `lastName` `email`, `password`, and admin', async () => {
       const savedUser = await user.save()
 
@@ -67,7 +67,7 @@ describe('User model', async () => {
     })
   })
 
-  xdescribe('Instance Methods', () => {
+  describe('Instance Methods', () => {
     describe('correctPassword', () => {
       it('returns true if the password is correct', () => {
         expect(user.correctPassword('bones')).to.be.equal(true)

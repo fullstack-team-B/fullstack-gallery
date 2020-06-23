@@ -2,7 +2,7 @@ const {expect} = require('chai')
 const db = require('../../server/db/index')
 const Order = db.model('order')
 
-describe('Order model', async () => {
+xdescribe('Order model', async () => {
   beforeEach(() => {
     return db.sync({force: true})
   })

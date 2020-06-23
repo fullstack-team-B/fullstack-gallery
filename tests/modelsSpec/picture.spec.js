@@ -2,7 +2,7 @@ const {expect} = require('chai')
 const db = require('../../server/db/index')
 const PictureList = db.model('picturelist')
 
-describe('PictureList model', async () => {
+xdescribe('PictureList model', async () => {
   beforeEach(() => {
     return db.sync({force: true})
   })
@@ -49,7 +49,6 @@ describe('PictureList model', async () => {
           'validation was successful but should have failed with `first name`, `last name`, or `email` as null'
         )
       } catch (error) {
-        console.log(error.message)
         expect(error.message).to.contain('picturelist.name cannot be null')
         expect(error.message).to.contain('picturelist.price cannot be null')
         expect(error.message).to.contain(
