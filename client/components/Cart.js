@@ -7,24 +7,28 @@ import {
   modifiedQuantity,
   removedItem,
   clearedCart
-} from '../store'
+} from '../store/cart'
 
 export class Cart extends React.Component {
   componentDidMount() {
-    this.props.gotCart()
+    console.log(this.props)
+    // Check if user is logged in before retrieving existing cart
+    if (this.props.isLoggedIn) this.props.getCart(this.props.userId)
   }
 
   render() {
-    // const cartId = this.props.cart.id
-    console.log('props=>', this.props)
-    return (
+    const currCart = this.props.cart
+
+    return currCart ? (
       <div className="cart-container">
         <h1 className="heading">Cart</h1>
 
         <div className="item-container">
-          {/* {cartId ? <h1>{cartId}</h1> : <h1>loading...</h1>} */}
+          <h1>{currCart.id}</h1>
         </div>
       </div>
+    ) : (
+      <h1>loading cart...</h1>
     )
   }
 }
@@ -38,7 +42,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    gotCart: userId => dispatch(gotCart(userId))
+    getCart: userId => dispatch(gotCart(userId))
   }
 }
 
