@@ -10,7 +10,6 @@ export class Shop extends React.Component {
 
   render() {
     const pictures = this.props.pictures
-    console.log(this.props)
 
     return (
       <div className="shop-container">

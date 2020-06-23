@@ -1,8 +1,8 @@
-// const {expect} = require('chai')
-// const request = require('supertest')
-// const db = require('../db')
-// const app = require('../index')
-// const Picture = db.model('PictureList')
+const {expect} = require('chai')
+const db = require('../../server/db')
+const app = require('../../server/index')
+const agent = require('supertest')(app)
+const Picture = db.model('picturelist')
 
 // describe('Picture routes', ()=>{
 //   beforeEach(()=>{
@@ -19,7 +19,7 @@
 //     })
 
 //     it('GET /api/pictures', async () => {
-//       const res = await request(app)
+//       const res = await agent
 //         .get('/api/pictures')
 //         .expect(200)
 
