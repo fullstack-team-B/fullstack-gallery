@@ -99,12 +99,26 @@ router.put('/', async (req, res, next) => {
   }
 })
 
+router.get('/TESTING123123123')
+
 // DELETE route for removing a single item for a user
 router.delete('/', (req, res, next) => {})
 
 // POST route for submitting an order
 router.post('/submit', (req, res, next) => {})
 
-// router.delete('/', async (req, res, next) => {})
+// Delete the current card(order) for the user
+router.delete('/clearCart', async (req, res, next) => {
+  console.log(req.body)
+
+  await Order.destroy({
+    where: {
+      userId: req.body.userId,
+      completed: false
+    }
+  })
+
+  res.end()
+})
 
 module.exports = router
