@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 // import {Link} from 'react-router-dom'
-import {fetchPicture, addToCart, gotItem} from '../store'
+import {fetchPicture, gotItem} from '../store'
 
 export class SingleProduct extends React.Component {
   componentDidMount() {
