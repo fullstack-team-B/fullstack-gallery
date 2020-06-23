@@ -26,7 +26,7 @@ const removeItem = id => ({
 })
 
 const clearCart = () => ({
-  type: CLEAR_CART
+  type: CLEAR_CART,
 })
 
 const getCart = cart => ({type: GET_CART, cart})
@@ -34,8 +34,7 @@ const getCart = cart => ({type: GET_CART, cart})
 // Thunk creators
 export const gotItem = (item, userId) => async dispatch => {
   const picturelistId = item.id
-  // const {data} = await axios.get(`/api/pictures/${id}`);
-  // Insert axios request w/ relevant route info for adding to orderQuantites table
+
   await axios.post(`/api/cart`, {
     picturelistId,
     userId
@@ -63,8 +62,8 @@ export const removedItem = id => /*async*/ dispatch => {
   dispatch(removeItem(id))
 }
 
-export const clearedCart = () => /*async*/ dispatch => {
-  // Axios request here to clear all rows in orderQuantities table associated with the user's orderID
+export const clearedCart = userId => async dispatch => {
+  await axios.delete('/api/cart/clearCart', {data: userId})
   dispatch(clearCart())
 }
 

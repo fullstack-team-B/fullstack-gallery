@@ -105,6 +105,19 @@ router.delete('/', (req, res, next) => {})
 // POST route for submitting an order
 router.post('/submit', (req, res, next) => {})
 
-// router.delete('/', async (req, res, next) => {})
+// Delete the current card(order) for the user
+router.delete('/clearCart', async (req, res, next) => {
+  try{
+    await Order.destroy({
+      where: {
+        userId: req.body.userId,
+        completed: false
+      }
+    })
+
+    res.sendStatus(204);
+  } catch (err) {
+    next (err)
+})
 
 module.exports = router
