@@ -5,8 +5,8 @@ import axios from 'axios'
  */
 const ALL_INFO = 'ALL_INFO'
 
-const REMOVE_USER = 'REMOVE_USER'
-const REMOVE_PICTURE = 'REMOVE_PICTURE'
+const DELETE_USER = 'DELETE_USER'
+const DELETE_PICTURE = 'DELETE_PICTURE'
 
 const UPDATE_PICTURE = 'UPDATE_PICTURE'
 
@@ -28,12 +28,12 @@ const getAllInfo = (users, pictures) => ({
 })
 
 const removeUser = userId => ({
-  type: REMOVE_USER,
+  type: DELETE_USER,
   userId
 })
 
 const removePicture = pictureId => ({
-  type: REMOVE_PICTURE,
+  type: DELETE_PICTURE,
   pictureId
 })
 
@@ -85,10 +85,10 @@ export default function(state = adminAccess, action) {
   switch (action.type) {
     case ALL_INFO:
       return {...state, users: action.users, pictures: action.pictures}
-    case REMOVE_USER:
+    case DELETE_USER:
       const updatedUser = state.users.filter(user => user.id !== action.userId)
       return {...state, users: updatedUser}
-    case REMOVE_PICTURE:
+    case DELETE_PICTURE:
       const pictures = state.pictures.filter(
         picture => picture.id !== action.pictureId
       )

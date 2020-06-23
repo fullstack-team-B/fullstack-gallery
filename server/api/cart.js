@@ -39,27 +39,40 @@ Incoming JSON data
 */
 
   try {
-    const {userId, picturelistId, orderId, quantity, cartExist} = req.body
+    const {userId, picturelistId, orderId, cartExist} = req.body
+    let {quantity} = req.body
 
-    if (!cartExist) {
-      // Creates a new order with the associated user ID
-      const newOrder = await Order.create({
-        userId: userId
-      })
+    if (quantity === undefined) quantity = 1
 
-      await OrderQuantity.create({
-        picturelistId: picturelistId,
-        orderId: newOrder.id,
-        quantity: quantity
-      })
-    } else {
-      //  Add a new item to existing order
-      await OrderQuantity.create({
-        picturelistId: picturelistId,
-        orderId: orderId,
-        quantity: quantity
-      })
-    }
+    // Sequelize method FIND OR CREATE
+    const newOrder = await Order.findOrCreate({
+      where: {userId: userId}
+    })
+
+    await OrderQuantity.create({
+      picturelistId: picturelistId,
+      orderId: newOrder[0].dataValues.id,
+      quantity: quantity
+    })
+    // if (!cartExist) {
+    //   // Creates a new order with the associated user ID
+    //   const newOrder = await Order.create({
+    //     userId: userId
+    //   })
+
+    //   await OrderQuantity.create({
+    //     picturelistId: picturelistId,
+    //     orderId: newOrder.id,
+    //     quantity: quantity
+    //   })
+    // } else {
+    //   //  Add a new item to existing order
+    //   await OrderQuantity.create({
+    //     picturelistId: picturelistId,
+    //     orderId: orderId,
+    //     quantity: quantity
+    //   })
+    // }
 
     res.status(201).json('newOrder')
   } catch (error) {
