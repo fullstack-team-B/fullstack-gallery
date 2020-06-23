@@ -99,8 +99,6 @@ router.put('/', async (req, res, next) => {
   }
 })
 
-router.get('/TESTING123123123')
-
 // DELETE route for removing a single item for a user
 router.delete('/', (req, res, next) => {})
 
