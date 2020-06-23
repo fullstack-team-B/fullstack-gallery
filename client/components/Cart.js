@@ -11,7 +11,6 @@ import {
 
 export class Cart extends React.Component {
   componentDidMount() {
-    console.log(this.props)
     // Check if user is logged in before retrieving existing cart
     if (this.props.isLoggedIn) this.props.getCart(this.props.userId)
   }
@@ -19,16 +18,26 @@ export class Cart extends React.Component {
   render() {
     const currCart = this.props.cart
 
-    return currCart ? (
+    console.log('Cart:', this.props)
+    return currCart.id ? (
       <div className="cart-container">
         <h1 className="heading">Cart</h1>
 
         <div className="item-container">
-          <h1>{currCart.id}</h1>
+          <h1>Order Id #: {currCart.id}</h1>
+          {currCart.picturelists.map(ele => {
+            return (
+              <div key={ele.id}>
+                <h2>Product Name: {ele.name}</h2>
+                <h2>Quantity: {ele.orderquantity.quantity}</h2>
+                <h3>Price: {ele.price}</h3>
+              </div>
+            )
+          })}
         </div>
       </div>
     ) : (
-      <h1>loading cart...</h1>
+      <h1>Loading Cart...</h1>
     )
   }
 }
@@ -36,7 +45,8 @@ export class Cart extends React.Component {
 const mapState = state => {
   return {
     cart: state.cart,
-    userId: state.user.id
+    userId: state.user.id,
+    isLoggedIn: !!state.user.id
   }
 }
 

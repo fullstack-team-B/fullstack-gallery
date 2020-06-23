@@ -42,26 +42,34 @@ Incoming JSON data
     const {userId, picturelistId, orderId, quantity, cartExist} = req.body
 
     // Sequelize method FIND OR CREATE
+    const newOrder = await Order.findOrCreate({
+      where: {userId: userId}
+    })
 
-    if (!cartExist) {
-      // Creates a new order with the associated user ID
-      const newOrder = await Order.create({
-        userId: userId
-      })
+    await OrderQuantity.create({
+      picturelistId: picturelistId,
+      orderId: newOrder[0].dataValues.id,
+      quantity: quantity
+    })
+    // if (!cartExist) {
+    //   // Creates a new order with the associated user ID
+    //   const newOrder = await Order.create({
+    //     userId: userId
+    //   })
 
-      await OrderQuantity.create({
-        picturelistId: picturelistId,
-        orderId: newOrder.id,
-        quantity: quantity
-      })
-    } else {
-      //  Add a new item to existing order
-      await OrderQuantity.create({
-        picturelistId: picturelistId,
-        orderId: orderId,
-        quantity: quantity
-      })
-    }
+    //   await OrderQuantity.create({
+    //     picturelistId: picturelistId,
+    //     orderId: newOrder.id,
+    //     quantity: quantity
+    //   })
+    // } else {
+    //   //  Add a new item to existing order
+    //   await OrderQuantity.create({
+    //     picturelistId: picturelistId,
+    //     orderId: orderId,
+    //     quantity: quantity
+    //   })
+    // }
 
     res.status(201).json('newOrder')
   } catch (error) {

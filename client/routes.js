@@ -31,11 +31,16 @@ class Routes extends Component {
         <Route exact path="/" component={Shop} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/shop/picture/:pictureId" component={SingleProduct} />
+        <Route exact path="/shop" component={Shop} />
+        <Route
+          exact
+          path="/shop/picture/:pictureId"
+          component={SingleProduct}
+        />
         <Route path="/cart" component={Cart} />
 
         {/* Shop All Component */}
-        <Route path="/shop" component={Shop} />
+
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
@@ -63,8 +68,8 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
-    },
-    getCart: userId => dispatch(gotCart(userId))
+    }
+    // getCart: userId => dispatch(gotCart(userId))
   }
 }
 

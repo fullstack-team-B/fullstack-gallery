@@ -40,8 +40,8 @@ export const gotItem = item => /*async*/ dispatch => {
 
 export const gotCart = userId => async dispatch => {
   try {
-    const existingCart = await axios.get(`/api/cart/${userId}`)
-    dispatch(getCart(existingCart))
+    const {data} = await axios.get(`/api/cart/${userId}`)
+    dispatch(getCart(data))
   } catch (error) {
     console.log(error)
   }
@@ -82,7 +82,7 @@ const cartReducer = (state = initialState, action) => {
     case CLEAR_CART:
       return initialState
     case GET_CART:
-      return {...state, ...action.cart}
+      return {...action.cart}
     default:
       return state
   }
