@@ -39,7 +39,10 @@ Incoming JSON data
 */
 
   try {
-    const {userId, picturelistId, orderId, quantity, cartExist} = req.body
+    const {userId, picturelistId, orderId, cartExist} = req.body
+    let {quantity} = req.body
+
+    if (quantity === undefined) quantity = 1
 
     // Sequelize method FIND OR CREATE
     const newOrder = await Order.findOrCreate({
