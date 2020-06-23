@@ -53,9 +53,9 @@ export const modifiedQuantity = (id, quantity) => /*async*/ dispatch => {
   dispatch(modifyQuantity(id, quantity))
 }
 
-export const removedItem = id => /*async*/ dispatch => {
-  // Axios request here to delete the specific item-row from orderQuantities table
-  dispatch(removeItem(id))
+export const removedItem = (itemId, orderId) => async dispatch => {
+  await axios.delete('/api/cart/removeItem', {data: {itemId, orderId}})
+  dispatch(removeItem(itemId))
 }
 
 export const clearedCart = () => /*async*/ dispatch => {

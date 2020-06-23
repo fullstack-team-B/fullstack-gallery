@@ -96,8 +96,21 @@ router.put('/', async (req, res, next) => {
   }
 })
 
-// DELETE route for removing a single item for a user
-router.delete('/', (req, res, next) => {})
+// DELETE route for removing all quantities of a single item for a user's cart
+router.delete('/removeItem', async (req, res, next) => {
+  try {
+    await OrderQuantity.destroy({
+      where: {
+        picturelistId: req.body.itemId,
+        orderId: req.body.orderId
+      }
+    })
+
+    res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
+})
 
 // POST route for submitting an order
 router.post('/submit', (req, res, next) => {})
