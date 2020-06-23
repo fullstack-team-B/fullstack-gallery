@@ -22,16 +22,17 @@ router.get('/:userId', async (req, res, next) => {
 
     const user = await User.findByPk(userId)
     const {admin} = user.dataValues
-
-    if (admin) {
-      const users = await User.findAll({
-        attributes: ['id', 'firstName', 'lastName', 'email', 'admin']
-      })
-      const pictures = await PictureList.findAll()
-      user.users = users
-      user.pictures = pictures
-    }
-    res.json(user)
+    if (userId) {
+      if (admin) {
+        const users = await User.findAll({
+          attributes: ['id', 'firstName', 'lastName', 'email', 'admin']
+        })
+        const pictures = await PictureList.findAll()
+        user.users = users
+        user.pictures = pictures
+      }
+      res.status(200).json(user)
+    } else sendStatus(404)
   } catch (error) {
     next(error)
   }
