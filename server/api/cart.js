@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {Order, OrderQuantity, PictureList} = require('../db/models')
+const db = require('../db/db')
 
 router.get('/:userId', async (req, res, next) => {
   try {
@@ -25,7 +26,7 @@ router.get('/:userId', async (req, res, next) => {
 
 // Post Request to Add item into cart and create a new Order
 router.post('/', async (req, res, next) => {
-  /* 
+  /*
 
 Incoming JSON data
 {
@@ -39,27 +40,40 @@ Incoming JSON data
 */
 
   try {
-    const {userId, picturelistId, orderId, quantity, cartExist} = req.body
+    const {userId, picturelistId, orderId, cartExist} = req.body
+    let {quantity} = req.body
 
-    if (!cartExist) {
-      // Creates a new order with the associated user ID
-      const newOrder = await Order.create({
-        userId: userId
-      })
+    if (quantity === undefined) quantity = 1
 
-      await OrderQuantity.create({
-        picturelistId: picturelistId,
-        orderId: newOrder.id,
-        quantity: quantity
-      })
-    } else {
-      //  Add a new item to existing order
-      await OrderQuantity.create({
-        picturelistId: picturelistId,
-        orderId: orderId,
-        quantity: quantity
-      })
-    }
+    // Sequelize method FIND OR CREATE
+    const newOrder = await Order.findOrCreate({
+      where: {userId: userId}
+    })
+
+    await OrderQuantity.create({
+      picturelistId: picturelistId,
+      orderId: newOrder[0].dataValues.id,
+      quantity: quantity
+    })
+    // if (!cartExist) {
+    //   // Creates a new order with the associated user ID
+    //   const newOrder = await Order.create({
+    //     userId: userId
+    //   })
+
+    //   await OrderQuantity.create({
+    //     picturelistId: picturelistId,
+    //     orderId: newOrder.id,
+    //     quantity: quantity
+    //   })
+    // } else {
+    //   //  Add a new item to existing order
+    //   await OrderQuantity.create({
+    //     picturelistId: picturelistId,
+    //     orderId: orderId,
+    //     quantity: quantity
+    //   })
+    // }
 
     res.status(201).json('newOrder')
   } catch (error) {
@@ -67,31 +81,97 @@ Incoming JSON data
   }
 })
 
-router.put('/', async (req, res, next) => {
+router.put('/:userId/increase', async (req, res, next) => {
   try {
-    const {userId, picturelistId, orderId, quantity, cartExist} = req.body
+    const {orderId, pictureId} = req.body
 
-    await OrderQuantity.update(
-      {
-        quantity: quantity
-      },
-      {
-        where: {orderId: orderId, picturelistId: picturelistId}
+    let orderquantity = await OrderQuantity.findOne({
+      where: {
+        orderId: orderId,
+        picturelistId: pictureId
       }
-    )
+    })
 
-    res.json('Updated')
-  } catch (error) {
-    next(error)
+    let pictureItem = await PictureList.findOne({
+      where: {
+        id: pictureId
+      }
+    })
+
+    // orderquantity.quantity++
+    // Math to get increased price
+    // pictureItem.price = await orderquantity.save()
+    await pictureItem.save()
+
+    res.json(pictureItem)
+  } catch (err) {
+    next(err)
   }
 })
 
-// DELETE route for removing a single item for a user
-router.delete('/', (req, res, next) => {})
+router.put('/:userId/decrease', async (req, res, next) => {
+  try {
+    const {orderId, pictureId} = req.body
+
+    let orderquantity = await OrderQuantity.findOne({
+      where: {
+        orderId: orderId,
+        picturelistId: pictureId
+      }
+    })
+
+    let pictureItem = await PictureList.findOne({
+      where: {
+        id: pictureId
+      }
+    })
+
+    // orderquantity.quantity--
+    // Math to get decrease price
+    // pictureItem.price =
+
+    await orderquantity.save()
+    // await pictureItem.save()
+
+    res.json(pictureItem)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// DELETE route for removing all quantities of a single item for a user's cart
+router.delete('/removeItem', async (req, res, next) => {
+  try {
+    await OrderQuantity.destroy({
+      where: {
+        picturelistId: req.body.itemId,
+        orderId: req.body.orderId
+      }
+    })
+
+    res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
+})
 
 // POST route for submitting an order
 router.post('/submit', (req, res, next) => {})
 
-// router.delete('/', async (req, res, next) => {})
+// Delete the current card(order) for the user
+router.delete('/clearCart', async (req, res, next) => {
+  try {
+    await Order.destroy({
+      where: {
+        userId: req.body.userId,
+        completed: false
+      }
+    })
+
+    res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
+})
 
 module.exports = router

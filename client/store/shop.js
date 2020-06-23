@@ -9,10 +9,6 @@ const ADD_TO_CART = 'ADD_TO_CART'
 // Action Creators
 const setPictures = pictures => ({type: SET_PICTURES, pictures})
 const singlePicture = picture => ({type: SINGLE_PICTURE, picture})
-// const addToCart = picture => ({
-//   type: ADD_TO_CART,
-//   picture
-// })
 
 // Thunk Creators
 
@@ -33,9 +29,13 @@ export const fetchPicture = pictureId => {
 }
 
 export const addToCart = (picturelistId, userId) => {
-  return async dispatch => {
-    const {data} = await axios.post(`/api/cart`, {picturelistId, userId})
-    // dispatch()
+  return async () => {
+    const quantity = 1
+    await axios.post(`/api/cart`, {
+      picturelistId,
+      userId,
+      quantity
+    })
   }
 }
 
@@ -49,9 +49,6 @@ export default function picturesReducer(state = initialState, action) {
 
     case SINGLE_PICTURE:
       return [action.picture]
-
-    // case ADD_TO_CART:
-    //   return
 
     default:
       return state

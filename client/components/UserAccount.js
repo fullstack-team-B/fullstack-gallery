@@ -26,7 +26,7 @@ export class UserAccount extends React.Component {
   render() {
     const {email, firstName, lastName, admin} = this.props.user
     const {pictures, users} = this.props.adminAccess
-    console.log('Props: ', this.props)
+
     return admin ? (
       <div>
         <h3>
@@ -108,7 +108,6 @@ export class UserAccount extends React.Component {
  * CONTAINER
  */
 const mapState = state => {
-  console.log('THIS is the store: ', state)
   return {
     user: state.user,
     adminAccess: state.adminAccess
