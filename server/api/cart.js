@@ -47,7 +47,10 @@ Incoming JSON data
 
     // Sequelize method FIND OR CREATE
     const newOrder = await Order.findOrCreate({
-      where: {userId: userId}
+      where: {
+        userId: userId,
+        completed: false
+      }
     })
 
     await OrderQuantity.create({
@@ -55,31 +58,22 @@ Incoming JSON data
       orderId: newOrder[0].dataValues.id,
       quantity: quantity
     })
-    // if (!cartExist) {
-    //   // Creates a new order with the associated user ID
-    //   const newOrder = await Order.create({
-    //     userId: userId
-    //   })
-
-    //   await OrderQuantity.create({
-    //     picturelistId: picturelistId,
-    //     orderId: newOrder.id,
-    //     quantity: quantity
-    //   })
-    // } else {
-    //   //  Add a new item to existing order
-    //   await OrderQuantity.create({
-    //     picturelistId: picturelistId,
-    //     orderId: orderId,
-    //     quantity: quantity
-    //   })
-    // }
 
     res.status(201).json('newOrder')
   } catch (error) {
     next(error)
   }
 })
+
+// router.put('/:userId', async (req, res, next) => {
+//   try {
+//     const userid = req.params.userId
+
+//     // await Order.update({})
+//   } catch (error) {
+//     next(err)
+//   }
+// })
 
 router.put('/:userId/increase', async (req, res, next) => {
   try {
@@ -98,12 +92,12 @@ router.put('/:userId/increase', async (req, res, next) => {
       }
     })
 
-    // orderquantity.quantity++
-    // Math to get increased price
-    // pictureItem.price = await orderquantity.save()
+    orderquantity.quantity++
+
+    await orderquantity.save()
     await pictureItem.save()
 
-    res.json(pictureItem)
+    res.json(orderquantity)
   } catch (err) {
     next(err)
   }
@@ -126,14 +120,12 @@ router.put('/:userId/decrease', async (req, res, next) => {
       }
     })
 
-    // orderquantity.quantity--
-    // Math to get decrease price
-    // pictureItem.price =
+    orderquantity.quantity--
 
     await orderquantity.save()
-    // await pictureItem.save()
+    await pictureItem.save()
 
-    res.json(pictureItem)
+    res.json(orderquantity)
   } catch (err) {
     next(err)
   }
@@ -156,11 +148,13 @@ router.delete('/removeItem', async (req, res, next) => {
 })
 
 // POST route for submitting an order
-router.post('/submit', (req, res, next) => {})
+router.post('/checkout', (req, res, next) => {})
 
 // Delete the current card(order) for the user
 router.delete('/clearCart', async (req, res, next) => {
   try {
+    console.log('Response ', req.body)
+
     await Order.destroy({
       where: {
         userId: req.body.userId,

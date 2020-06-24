@@ -14,9 +14,9 @@ const addItem = item => ({
   item
 })
 
-const updatedQuantity = cart => ({
+const updatedQuantity = picture => ({
   type: UPDATED_QUANTITY,
-  cart
+  picture
 })
 
 const removeItem = id => ({
@@ -60,6 +60,8 @@ export const increaseQuantity = (
     pictureId: pictureId
   })
   dispatch(updatedQuantity(data))
+  const res = await axios.get(`/api/cart/${userId}`)
+  dispatch(getCart(res.data))
 }
 
 export const decreaseQuantity = (
@@ -72,15 +74,19 @@ export const decreaseQuantity = (
     pictureId: pictureId
   })
   dispatch(updatedQuantity(data))
+  const res = await axios.get(`/api/cart/${userId}`)
+  dispatch(getCart(res.data))
 }
 
-export const removedItem = (itemId, orderId) => async dispatch => {
+export const removedItem = (itemId, orderId, userId) => async dispatch => {
   await axios.delete('/api/cart/removeItem', {data: {itemId, orderId}})
   dispatch(removeItem(itemId))
+  const res = await axios.get(`/api/cart/${userId}`)
+  dispatch(getCart(res.data))
 }
 
 export const clearedCart = userId => async dispatch => {
-  await axios.delete('/api/cart/clearCart', {data: userId})
+  await axios.delete('/api/cart/clearCart', {data: {userId: userId}})
   dispatch(clearCart())
 }
 
@@ -92,11 +98,19 @@ const cartReducer = (state = initialState, action) => {
       state[action.item.id]
         ? (state[action.item.id].quantity = state[action.item.id].quantity + 1)
         : (action.item.quantity = 1)
+      console.log(history)
       return {...state, [action.item.id]: action.item}
     case UPDATED_QUANTITY:
-    // console.log(state)
-    // Needs to update the cart
-    // return {...state, cart: action.cart}
+      const actionpic = action.picture
+      const picturelist = state.picturelists
+      const updatedPictureList = picturelist.map((pic, idx) => {
+        if (actionpic.picturelistId === pic.id) {
+          picturelist[idx].quantity = actionpic.quantity
+        }
+        return pic
+      })
+
+      return {...state, picturelists: updatedPictureList}
     case REMOVE_ITEM:
       delete state[action.id]
       return {...state}
