@@ -65,15 +65,27 @@ Incoming JSON data
   }
 })
 
-// router.put('/:userId', async (req, res, next) => {
-//   try {
-//     const userid = req.params.userId
+router.put('/:userId/checkout', async (req, res, next) => {
+  try {
+    const userid = req.params.userId
 
-//     // await Order.update({})
-//   } catch (error) {
-//     next(err)
-//   }
-// })
+    await Order.update(
+      {
+        completed: true
+      },
+      {
+        where: {
+          userId: userid,
+          completed: false
+        }
+      }
+    )
+
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.put('/:userId/increase', async (req, res, next) => {
   try {

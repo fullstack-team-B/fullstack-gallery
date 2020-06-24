@@ -7,28 +7,15 @@ const UPDATED_QUANTITY = 'UPDATED_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
 const CLEAR_CART = 'CLEAR_CART'
 const GET_CART = 'GET_CART'
+const CHECKOUT = 'CHECKOUT'
 
 // Action creators
-const addItem = item => ({
-  type: ADD_ITEM,
-  item
-})
-
-const updatedQuantity = picture => ({
-  type: UPDATED_QUANTITY,
-  picture
-})
-
-const removeItem = id => ({
-  type: REMOVE_ITEM,
-  id
-})
-
-const clearCart = () => ({
-  type: CLEAR_CART
-})
-
+const addItem = item => ({type: ADD_ITEM, item})
+const updatedQuantity = picture => ({type: UPDATED_QUANTITY, picture})
+const removeItem = id => ({type: REMOVE_ITEM, id})
+const clearCart = () => ({type: CLEAR_CART})
 const getCart = cart => ({type: GET_CART, cart})
+const checkout = () => ({type: CHECKOUT})
 
 // Thunk creators
 export const gotItem = (item, userId) => async dispatch => {
@@ -90,6 +77,13 @@ export const clearedCart = userId => async dispatch => {
   dispatch(clearCart())
 }
 
+export const checkedOut = userId => async dispatch => {
+  history.push('/checkout')
+  await axios.put(`/api/cart/${userId}/checkout`)
+
+  dispatch(checkout())
+}
+
 const initialState = {}
 
 const cartReducer = (state = initialState, action) => {
@@ -118,6 +112,8 @@ const cartReducer = (state = initialState, action) => {
       return initialState
     case GET_CART:
       return {...action.cart}
+    case CHECKOUT:
+      return initialState
     default:
       return state
   }

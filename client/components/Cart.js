@@ -8,7 +8,8 @@ import {
   increaseQuantity,
   decreaseQuantity,
   removedItem,
-  clearedCart
+  clearedCart,
+  checkedOut
 } from '../store/cart'
 
 export class Cart extends React.Component {
@@ -16,10 +17,7 @@ export class Cart extends React.Component {
     // Check if user is logged in before retrieving existing cart
     if (this.props.isLoggedIn) this.props.getCart(this.props.userId)
   }
-  routeChange = () => {
-    let path = `/checkout`
-    history.push(path)
-  }
+
   render() {
     const {id, picturelists, userId} = this.props.cart
     return id ? (
@@ -65,7 +63,9 @@ export class Cart extends React.Component {
           })}
         </div>
         {this.props.cart.picturelists.length ? (
-          <button onClick={this.routeChange}>Checkout</button>
+          <button onClick={() => this.props.checkedOut(userId)}>
+            Checkout
+          </button>
         ) : (
           <div />
         )}
@@ -97,7 +97,9 @@ const mapDispatch = dispatch => {
     clearedCart: userId => dispatch(clearedCart(userId)),
 
     removedItem: (itemId, orderId, userId) =>
-      dispatch(removedItem(itemId, orderId, userId))
+      dispatch(removedItem(itemId, orderId, userId)),
+
+    checkedOut: userId => dispatch(checkedOut(userId))
   }
 }
 
