@@ -92,7 +92,6 @@ const cartReducer = (state = initialState, action) => {
       state[action.item.id]
         ? (state[action.item.id].quantity = state[action.item.id].quantity + 1)
         : (action.item.quantity = 1)
-      console.log(history)
       return {...state, [action.item.id]: action.item}
     case UPDATED_QUANTITY:
       const actionpic = action.picture

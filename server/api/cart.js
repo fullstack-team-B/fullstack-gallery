@@ -165,8 +165,6 @@ router.post('/checkout', (req, res, next) => {})
 // Delete the current card(order) for the user
 router.delete('/clearCart', async (req, res, next) => {
   try {
-    console.log('Response ', req.body)
-
     await Order.destroy({
       where: {
         userId: req.body.userId,

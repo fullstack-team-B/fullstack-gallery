@@ -27,7 +27,6 @@ router.post('/', async (req, res, next) => {
     const pictureData = req.body
     const newPicture = await PictureList.create(pictureData)
 
-    console.log('created new picture entry')
     res.status(201).json(newPicture)
   } catch (error) {
     next(error)

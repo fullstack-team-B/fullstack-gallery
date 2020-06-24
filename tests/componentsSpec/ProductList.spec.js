@@ -32,7 +32,6 @@ describe('Shop Component', () => {
 
   it('starts with an initial state having an empty productlist array', () => {
     const currentState = shopWrapper.state()
-    console.log(currentState)
     expect(currentState.articles).to.be.deep.equal([])
   })
 
