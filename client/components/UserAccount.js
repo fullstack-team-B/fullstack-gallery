@@ -2,6 +2,33 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {fetchAllInfo, removedUser, removedPicture} from '../store/adminAccess'
+import {withStyles} from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import ButtonBase from '@material-ui/core/ButtonBase'
+import Button from '@material-ui/core/Button'
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  paper: {
+    padding: theme.spacing(2),
+    margin: 'auto',
+    maxWidth: 500
+  },
+  image: {
+    width: 128,
+    height: 128
+  },
+  img: {
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%'
+  }
+})
 
 /**
  * COMPONENT
@@ -26,7 +53,7 @@ export class UserAccount extends React.Component {
   render() {
     const {email, firstName, lastName, admin} = this.props.user
     const {pictures, users} = this.props.adminAccess
-
+    const {classes} = this.props
     return admin ? (
       <div>
         <h3>
@@ -87,17 +114,44 @@ export class UserAccount extends React.Component {
         <h3>This is an admin</h3>
       </div>
     ) : (
-      <div>
-        <h3>
+      <div className={classes.root} align="center" style={{padding: 24}}>
+        <Typography variant="h5">
           Welcome, {firstName} {lastName}!
-        </h3>
-        <ul>
-          <li>Customer</li>
-          <li>{email}</li>
-          <li>Address</li>
-        </ul>
-        <img id="pictureImg" src="" />
-        <button>Edit profile</button>
+        </Typography>
+        <Paper className={classes.paper}>
+          <Grid container spacing={2}>
+            <Grid item>
+              <ButtonBase className={classes.image}>
+                <img
+                  id="pictureImg"
+                  className={classes.img}
+                  alt="complex"
+                  src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+                />
+              </ButtonBase>
+            </Grid>
+
+            <Grid item xs={12} sm container align="left">
+              <Grid item xs container direction="column" spacing={2}>
+                <Grid item xs>
+                  <Typography gutterBottom variant="subtitle1">
+                    Customer
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    {email}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Address
+                  </Typography>
+                  <Button variant="contained" size="small" color="primary">
+                    Edit profile
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>}
+        </Paper>
+
         {/* <Order /> */}
       </div>
     )
@@ -119,7 +173,7 @@ const mapDispatch = dispatch => ({
   removedPicture: pictureId => dispatch(removedPicture(pictureId))
 })
 
-export default connect(mapState, mapDispatch)(UserAccount)
+export default withStyles(styles)(connect(mapState, mapDispatch)(UserAccount))
 
 /**
  * PROP TYPES
