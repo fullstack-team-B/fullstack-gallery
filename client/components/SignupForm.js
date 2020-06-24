@@ -46,7 +46,7 @@ const SignupForm = props => {
         Sign up
       </Typography>
 
-      <form className={classes.form}>
+      <form onSubmit={handleSubmit} className={classes.form} name={name}>
         <TextField
           id="standard-basic"
           label="First Name"
@@ -54,6 +54,7 @@ const SignupForm = props => {
           variant="outlined"
           margin="normal"
           fullWidth
+          name="firstName"
         />
         <TextField
           id="standard-basic"
@@ -62,6 +63,7 @@ const SignupForm = props => {
           variant="outlined"
           margin="normal"
           fullWidth
+          name="lastName"
         />
         <TextField
           id="email"
@@ -123,6 +125,8 @@ const mapDispatch = dispatch => {
     }
   }
 }
+
+console.log(SignupForm)
 
 // export const Login = connect(mapLogin, mapDispatch)(AuthForm)
 export const Signup = connect(mapSignup, mapDispatch)(SignupForm)
