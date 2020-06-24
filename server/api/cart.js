@@ -65,6 +65,16 @@ Incoming JSON data
   }
 })
 
+// router.put('/:userId', async (req, res, next) => {
+//   try {
+//     const userid = req.params.userId
+
+//     // await Order.update({})
+//   } catch (error) {
+//     next(err)
+//   }
+// })
+
 router.put('/:userId/increase', async (req, res, next) => {
   try {
     const {orderId, pictureId} = req.body
