@@ -46,6 +46,7 @@ const SignupForm = props => {
         Sign up
       </Typography>
 
+
       <form onSubmit={handleSubmit} name={name} className={classes.form}>
         <TextField
           id="firstName"
@@ -54,6 +55,7 @@ const SignupForm = props => {
           variant="outlined"
           margin="normal"
           fullWidth
+          name="firstName"
         />
         <TextField
           id="lastName"
@@ -62,6 +64,7 @@ const SignupForm = props => {
           variant="outlined"
           margin="normal"
           fullWidth
+          name="lastName"
         />
         <TextField
           id="email"

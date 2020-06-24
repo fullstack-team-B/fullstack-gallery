@@ -1,7 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import {Link} from 'react-router-dom'
 import {fetchPicture, gotItem} from '../store'
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
+import Button from '@material-ui/core/Button'
 
 export class SingleProduct extends React.Component {
   componentDidMount() {
@@ -13,17 +15,28 @@ export class SingleProduct extends React.Component {
     const picture = this.props.picture[0]
 
     return picture ? (
-      <div>
-        <h2>{picture.name}</h2>
-        <img id="pictureImg" src={picture.imageUrl} />
-        <p>{picture.description}</p>
-        <button
-          type="button"
-          onClick={() => this.props.gotItem(picture, this.props.userId)}
+      <Box display="flex" style={{padding: 24, margin: 24}}>
+        <Box>
+          <img id="pictureImg" src={picture.imageUrl} height={400} />
+        </Box>
+        <Box
+          display="flex"
+          style={{padding: 24, margin: 24}}
+          flexDirection="column"
         >
-          Add To Cart
-        </button>
-      </div>
+          <Typography variant="h4">{picture.name}</Typography>
+
+          <Typography variant="subtitle1">{picture.description}</Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            // type="button"
+            onClick={() => this.props.gotItem(picture, this.props.userId)}
+          >
+            Add To Cart
+          </Button>
+        </Box>
+      </Box>
     ) : (
       <h1> Loading </h1>
     )
