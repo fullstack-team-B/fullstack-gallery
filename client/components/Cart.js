@@ -15,17 +15,16 @@ export class Cart extends React.Component {
     // Check if user is logged in before retrieving existing cart
     if (this.props.isLoggedIn) this.props.getCart(this.props.userId)
   }
-
-  // decrease() {
-  //   this.props.decreaseQuantity(this.props.match.params.id)
-  // }
-
   render() {
     const {id, picturelists, userId} = this.props.cart
-    console.log('Cart:', this.props)
     return id ? (
       <div className="cart-container">
-        <h1 className="heading">Cart</h1>
+        <div>
+          <h1 className="heading">Cart</h1>
+          <button onClick={() => this.props.clearedCart(userId)}>
+            Clear Cart
+          </button>
+        </div>
 
         <div className="item-container">
           <h1>Order Id #: {id}</h1>
@@ -34,7 +33,7 @@ export class Cart extends React.Component {
               <div key={ele.id}>
                 <h2>Product Name: {ele.name}</h2>
                 <h2>Quantity: {ele.orderquantity.quantity}</h2>
-                <h3>Price: {ele.price}</h3>
+                <h3>Price: {ele.price * ele.orderquantity.quantity}</h3>
 
                 <button
                   onClick={() =>
@@ -51,20 +50,28 @@ export class Cart extends React.Component {
                 >
                   Decrease
                 </button>
-                <button>Remove</button>
+                <button
+                  onClick={() => this.props.removedItem(ele.id, id, userId)}
+                >
+                  Remove
+                </button>
               </div>
             )
           })}
         </div>
+        {this.props.cart.picturelists.length ? (
+          <button>Checkout</button>
+        ) : (
+          <div />
+        )}
       </div>
     ) : (
-      <h1>Loading Cart...</h1>
+      <h1>Cart is empty</h1>
     )
   }
 }
 
 const mapState = state => {
-  console.log('This the state: ', state)
   return {
     cart: state.cart,
     userId: state.user.id,
@@ -78,7 +85,10 @@ const mapDispatch = dispatch => {
     increaseQuantity: (userId, orderId, pictureId) =>
       dispatch(increaseQuantity(userId, orderId, pictureId)),
     decreaseQuantity: (userId, orderId, pictureId) =>
-      dispatch(decreaseQuantity(userId, orderId, pictureId))
+      dispatch(decreaseQuantity(userId, orderId, pictureId)),
+    clearedCart: userId => dispatch(clearedCart(userId)),
+    removedItem: (itemId, orderId, userId) =>
+      dispatch(removedItem(itemId, orderId, userId))
   }
 }
 
