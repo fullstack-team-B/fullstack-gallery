@@ -41,41 +41,57 @@ Incoming JSON data
 
   try {
     const {userId, picturelistId, orderId, cartExist} = req.body
-    let {quantity} = req.body
-
-    if (quantity === undefined) quantity = 1
 
     // Sequelize method FIND OR CREATE
     const newOrder = await Order.findOrCreate({
-      where: {userId: userId}
+      where: {
+        userId: userId,
+        completed: false
+      }
     })
 
-    await OrderQuantity.create({
-      picturelistId: picturelistId,
-      orderId: newOrder[0].dataValues.id,
-      quantity: quantity
+    const order = await OrderQuantity.findOne({
+      where: {
+        picturelistId: picturelistId,
+        orderId: newOrder[0].dataValues.id
+      }
     })
-    // if (!cartExist) {
-    //   // Creates a new order with the associated user ID
-    //   const newOrder = await Order.create({
-    //     userId: userId
-    //   })
 
-    //   await OrderQuantity.create({
-    //     picturelistId: picturelistId,
-    //     orderId: newOrder.id,
-    //     quantity: quantity
-    //   })
-    // } else {
-    //   //  Add a new item to existing order
-    //   await OrderQuantity.create({
-    //     picturelistId: picturelistId,
-    //     orderId: orderId,
-    //     quantity: quantity
-    //   })
-    // }
+    if (order) {
+      order.quantity++
+    } else {
+      await OrderQuantity.create({
+        picturelistId: picturelistId,
+        orderId: newOrder[0].dataValues.id,
+        quantity: 1
+      })
+    }
 
-    res.status(201).json('newOrder')
+    await order.save()
+
+    res.status(204).json('newOrder')
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/:userId/checkout', async (req, res, next) => {
+  try {
+    const userid = req.params.userId
+
+    await Order.update(
+      {
+        completed: true
+      },
+      {
+        where: {
+          userId: userid,
+          completed: false
+        }
+      }
+    )
+
+    res.sendStatus(204)
   } catch (error) {
     next(error)
   }
@@ -98,12 +114,12 @@ router.put('/:userId/increase', async (req, res, next) => {
       }
     })
 
-    // orderquantity.quantity++
-    // Math to get increased price
-    // pictureItem.price = await orderquantity.save()
+    orderquantity.quantity++
+
+    await orderquantity.save()
     await pictureItem.save()
 
-    res.json(pictureItem)
+    res.json(orderquantity)
   } catch (err) {
     next(err)
   }
@@ -126,14 +142,12 @@ router.put('/:userId/decrease', async (req, res, next) => {
       }
     })
 
-    // orderquantity.quantity--
-    // Math to get decrease price
-    // pictureItem.price =
+    orderquantity.quantity--
 
     await orderquantity.save()
-    // await pictureItem.save()
+    await pictureItem.save()
 
-    res.json(pictureItem)
+    res.json(orderquantity)
   } catch (err) {
     next(err)
   }
@@ -154,9 +168,6 @@ router.delete('/removeItem', async (req, res, next) => {
     next(err)
   }
 })
-
-// POST route for submitting an order
-router.post('/submit', (req, res, next) => {})
 
 // Delete the current card(order) for the user
 router.delete('/clearCart', async (req, res, next) => {

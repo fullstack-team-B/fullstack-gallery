@@ -1,13 +1,15 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import history from '../history'
 import {
   gotItem,
   gotCart,
   increaseQuantity,
   decreaseQuantity,
   removedItem,
-  clearedCart
+  clearedCart,
+  checkedOut
 } from '../store/cart'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -44,12 +46,9 @@ export class Cart extends React.Component {
     if (this.props.isLoggedIn) this.props.getCart(this.props.userId)
   }
 
-  // decrease() {
-  //   this.props.decreaseQuantity(this.props.match.params.id)
-  // }
-
   render() {
     const {id, picturelists, userId} = this.props.cart
+
     const {classes} = this.props
 
     return id ? (
@@ -57,12 +56,16 @@ export class Cart extends React.Component {
         <Typography variant="h4" style={{margin: 24}}>
           Cart
         </Typography>
-
+        <Button onClick={() => this.props.clearedCart(userId)}>
+            Clear Cart
+          </Button>
         <Paper className={classes.paper}>
           <Typography variant="h6">Order Id #: {id}</Typography>
 
+
           {picturelists.map(ele => {
             return (
+
               <Grid
                 item
                 xs={12}
@@ -72,6 +75,10 @@ export class Cart extends React.Component {
                 key={ele.id}
               >
                 <Grid item xs container direction="row" spacing={2}>
+                  // Product detail
+                  <h2>Product Name: {ele.name}</h2>
+                <h2>Quantity: {ele.orderquantity.quantity}</h2>
+                <h3>Price: {ele.price * ele.orderquantity.quantity}</h3>
                   <ButtonBase className={classes.image}>
                     <img
                       id="pictureImg"
@@ -80,9 +87,11 @@ export class Cart extends React.Component {
                     />
                   </ButtonBase>
 
+
                   <Grid item xs>
                     <Typography variant="h5">{ele.name}</Typography>
                   </Grid>
+
 
                   <Grid item xs>
                     <Typography variant="h5">
@@ -106,7 +115,7 @@ export class Cart extends React.Component {
                   </Grid>
 
                   <Grid item xs>
-                    <Button>Remove</Button>
+                    <Button onClick={() => this.props.removedItem(ele.id, id, userId)}>Remove</Button>
                   </Grid>
                   <Grid item xs>
                     <Typography variant="h5">Price: ${ele.price}</Typography>
@@ -122,16 +131,37 @@ export class Cart extends React.Component {
           </Box>
 
           <Grid item xs>
+            // Fix Checkout
+            {this.props.cart.picturelists.length ? (
+          <button onClick={() => this.props.checkedOut(userId)}>
+            Checkout
+          </button>
+        ) : (
+          <div />
+        )}
+
+      </div>
+    ) : (
+      <h1>Cart is empty</h1>
+    )
+  }
             <Button variant="contained" fullWidth color="primary">
               CHECKOUT
             </Button>
           </Grid>
         </Paper>
-      </div>
-    ) : (
-      <h1>Loading Cart...</h1>
-    )
-  }
+
+                
+                <button
+                  
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          })}
+        </div>
+        
 }
 
 const mapState = state => {
@@ -145,10 +175,19 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     getCart: userId => dispatch(gotCart(userId)),
+
     increaseQuantity: (userId, orderId, pictureId) =>
       dispatch(increaseQuantity(userId, orderId, pictureId)),
+
     decreaseQuantity: (userId, orderId, pictureId) =>
-      dispatch(decreaseQuantity(userId, orderId, pictureId))
+      dispatch(decreaseQuantity(userId, orderId, pictureId)),
+
+    clearedCart: userId => dispatch(clearedCart(userId)),
+
+    removedItem: (itemId, orderId, userId) =>
+      dispatch(removedItem(itemId, orderId, userId)),
+
+    checkedOut: userId => dispatch(checkedOut(userId))
   }
 }
 

@@ -36,22 +36,24 @@ const Navbar = ({handleClick, isLoggedIn}) => {
             {isLoggedIn ? (
               <div>
                 {/* The navbar will show these links after you log in */}
+
                 <Link className="account" to="/account">
                   <Button color="inherit">Account</Button>
                 </Link>
                 <a href="#" onClick={handleClick}>
                   <Button color="inherit">Logout</Button>
                 </a>
+
               </div>
             ) : (
               <div>
                 {/* The navbar will show these links before you log in */}
                 <Link to="/login">
-                  <Button color="inherit">Login</Button>
+                  <Button color="inherit">LOGIN</Button>
                 </Link>
 
                 <Link to="/signup">
-                  <Button color="inherit">Sign Up</Button>
+                  <Button color="inherit">SIGN UP</Button>
                 </Link>
               </div>
             )}
