@@ -9,6 +9,34 @@ import {
   removedItem,
   clearedCart
 } from '../store/cart'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import ButtonBase from '@material-ui/core/ButtonBase'
+import {withStyles} from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
+
+const styles = theme => ({
+  root: {
+    flexGrow: 12
+  },
+  paper: {
+    padding: theme.spacing(2),
+    margin: 'auto',
+    maxWidth: 1000
+  },
+  image: {
+    width: 128,
+    height: 128
+  },
+  img: {
+    // margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%'
+  }
+})
 
 export class Cart extends React.Component {
   componentDidMount() {
@@ -22,40 +50,83 @@ export class Cart extends React.Component {
 
   render() {
     const {id, picturelists, userId} = this.props.cart
-    console.log('Cart:', this.props)
-    return id ? (
-      <div className="cart-container">
-        <h1 className="heading">Cart</h1>
+    const {classes} = this.props
 
-        <div className="item-container">
-          <h1>Order Id #: {id}</h1>
+    return id ? (
+      <div className={classes.root}>
+        <Typography variant="h4" style={{margin: 24}}>
+          Cart
+        </Typography>
+
+        <Paper className={classes.paper}>
+          <Typography variant="h6">Order Id #: {id}</Typography>
+
           {picturelists.map(ele => {
             return (
-              <div key={ele.id}>
-                <h2>Product Name: {ele.name}</h2>
-                <h2>Quantity: {ele.orderquantity.quantity}</h2>
-                <h3>Price: {ele.price}</h3>
+              <Grid
+                item
+                xs={12}
+                sm
+                container
+                style={{padding: 24}}
+                key={ele.id}
+              >
+                <Grid item xs container direction="row" spacing={2}>
+                  <ButtonBase className={classes.image}>
+                    <img
+                      id="pictureImg"
+                      className={classes.img}
+                      src={ele.imageUrl}
+                    />
+                  </ButtonBase>
 
-                <button
-                  onClick={() =>
-                    this.props.increaseQuantity(userId, id, ele.id)
-                  }
-                >
-                  Increase
-                </button>
+                  <Grid item xs>
+                    <Typography variant="h5">{ele.name}</Typography>
+                  </Grid>
 
-                <button
-                  onClick={() =>
-                    this.props.decreaseQuantity(userId, id, ele.id)
-                  }
-                >
-                  Decrease
-                </button>
-                <button>Remove</button>
-              </div>
+                  <Grid item xs>
+                    <Typography variant="h5">
+                      Quantity: {ele.orderquantity.quantity}
+                    </Typography>
+
+                    <Button
+                      onClick={() =>
+                        this.props.decreaseQuantity(userId, id, ele.id)
+                      }
+                    >
+                      &#9664;
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        this.props.increaseQuantity(userId, id, ele.id)
+                      }
+                    >
+                      &#9654;
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs>
+                    <Button>Remove</Button>
+                  </Grid>
+                  <Grid item xs>
+                    <Typography variant="h5">Price: ${ele.price}</Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
             )
           })}
-        </div>
+          <Box bgcolor="WhiteSmoke">
+            <Typography variant="h5" align="right" style={{padding: 24}}>
+              TOTAL PRICE: $800
+            </Typography>
+          </Box>
+
+          <Grid item xs>
+            <Button variant="contained" fullWidth color="primary">
+              CHECKOUT
+            </Button>
+          </Grid>
+        </Paper>
       </div>
     ) : (
       <h1>Loading Cart...</h1>
@@ -64,7 +135,6 @@ export class Cart extends React.Component {
 }
 
 const mapState = state => {
-  console.log('This the state: ', state)
   return {
     cart: state.cart,
     userId: state.user.id,
@@ -82,4 +152,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Cart)
+export default withStyles(styles)(connect(mapState, mapDispatch)(Cart))
