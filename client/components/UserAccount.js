@@ -8,6 +8,11 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card'
+import CardActionArea from '@material-ui/core/CardActionArea'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
 
 const styles = theme => ({
   root: {
@@ -54,64 +59,128 @@ export class UserAccount extends React.Component {
     const {email, firstName, lastName, admin} = this.props.user
     const {pictures, users} = this.props.adminAccess
     const {classes} = this.props
+
     return admin ? (
       <div>
-        <h3>
-          Welcome, {firstName} {lastName}!
-        </h3>
-        <h4>{email}</h4>
-        <div className="all-users">
-          <h4>All Users</h4>
-          <div>
-            <ul className="user-container">
-              {users.map(user => {
-                return (
-                  <li key={user.id}>
-                    <div className="user-detail">
-                      <h3 id="userFirstName">{user.firstName}</h3>
-                      <h3 id="userLastName">{user.lastName}</h3>
-                      <h3 id="userEmail">{user.email}</h3>
-                      <p id="userAdmin">{user.admin}</p>
-                    </div>
-                    <div>
-                      <button>Edit</button>
-                      <button onClick={() => this.removedUser(user.id)}>
-                        Delete
-                      </button>
-                    </div>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        </div>
-        <div className="all-pictures">
-          <h4>All Products</h4>
-          <div>
-            <ul className="picture-container">
-              {pictures.map(picture => {
-                return (
-                  <li key={picture.id}>
-                    <img id="pictureImg" src={picture.imageUrl} />
-                    <div className="detail">
-                      <h3 id="pictureName">{picture.name}</h3>
-                      <h3 id="picturePrice">{picture.price}</h3>
-                      <p id="pictureDescription">{picture.description}</p>
-                    </div>
-                    <div>
-                      <button>Edit</button>
-                      <button onClick={() => this.removedPicture(picture.id)}>
-                        Delete
-                      </button>
-                    </div>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
+        <div className={classes.root} align="center" style={{padding: 24}}>
+          <Typography variant="h5">
+            Welcome, {firstName} {lastName}!
+          </Typography>
+
+          <Typography variant="h5">{email}</Typography>
         </div>
 
-        <h3>This is an admin</h3>
+        <div className="all-users">
+          <Typography variant="h4" style={{margin: 24}}>
+            All Users
+          </Typography>
+
+          <Grid
+            container
+            spacing={3}
+            style={{padding: 24}}
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+          >
+            {users.map(user => {
+              return (
+                <Grid item xs={4} key={user.id}>
+                  <Card className={classes.root}>
+                    <CardContent>
+                      <Typography
+                        className={classes.title}
+                        color="textSecondary"
+                        gutterBottom
+                        variant="h5"
+                      >
+                        {user.firstName} {user.lastName}
+                      </Typography>
+
+                      <Typography className={classes.pos} color="textSecondary">
+                        {user.email}
+                      </Typography>
+                      <Typography className={classes.pos} color="textSecondary">
+                        {user.admin}
+                      </Typography>
+                    </CardContent>
+
+                    <CardActions>
+                      <Button>Edit</Button>
+                      <Button onClick={() => this.removedUser(user.id)}>
+                        Delete
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              )
+            })}
+          </Grid>
+        </div>
+
+        <div className="all-pictures">
+          <Typography variant="h4" style={{margin: 24}}>
+            All Products
+          </Typography>
+          <Grid
+            container
+            spacing={3}
+            style={{padding: 24}}
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+          >
+            {/* <ul className="picture-container"> */}
+            {pictures.map(picture => {
+              return (
+                <Grid item xs={4} key={picture.id}>
+                  <Card className={classes.root}>
+                    <CardActionArea>
+                      <CardMedia
+                        className={classes.media}
+                        component="img"
+                        image={picture.imageUrl}
+                        title={picture.name}
+                      />
+
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {picture.name}
+                        </Typography>
+
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {picture.description}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          $ {picture.price}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+
+                    <CardActions>
+                      <Button>Edit</Button>
+                      <Button onClick={() => this.removedPicture(picture.id)}>
+                        Delete
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              )
+            })}
+
+            {/* </ul> */}
+
+            <Typography variant="h6">This is an admin</Typography>
+          </Grid>
+        </div>
       </div>
     ) : (
       <div className={classes.root} align="center" style={{padding: 24}}>
