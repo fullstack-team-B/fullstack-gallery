@@ -2,10 +2,31 @@ const router = require('express').Router()
 const {Order, OrderQuantity, PictureList} = require('../db/models')
 const db = require('../db/db')
 
+// router.get('/:userId', async (req, res, next) => {
+//   try {
+//     //get all pictures and quantity currently in the cart
+
+//     const userId = req.params.userId
+
+//     const order = await Order.findOne({
+//       where: {
+//         //hard-coded for testing
+//         userId: userId,
+//         // userId: req.params.id
+//         completed: false
+//       },
+//       include: [{model: PictureList}]
+//     })
+
+//     res.json(order)
+//   } catch (error) {
+//     next(error)
+//   }
+// })
+
 router.get('/:userId', async (req, res, next) => {
   try {
     //get all pictures and quantity currently in the cart
-
     const userId = req.params.userId
 
     const order = await Order.findOne({
@@ -14,11 +35,19 @@ router.get('/:userId', async (req, res, next) => {
         userId: userId,
         // userId: req.params.id
         completed: false
-      },
-      include: [{model: PictureList}]
+      }
     })
 
-    res.json(order)
+    let orderQuantities = await OrderQuantity.findAll({
+      where: {orderId: order.id}
+    })
+
+    const cart = {}
+    orderQuantities.forEach(ele => {
+      cart[ele.dataValues.picturelistId] = ele
+    })
+    cart.orderId = order.id
+    res.json(cart)
   } catch (error) {
     next(error)
   }
@@ -98,9 +127,9 @@ router.put('/:userId/increase', async (req, res, next) => {
       }
     })
 
-    // orderquantity.quantity++
+    orderquantity.quantity++
     // Math to get increased price
-    // pictureItem.price = await orderquantity.save()
+    pictureItem.price = await orderquantity.save()
     await pictureItem.save()
 
     res.json(pictureItem)
