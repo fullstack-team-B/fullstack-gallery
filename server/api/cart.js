@@ -41,9 +41,6 @@ Incoming JSON data
 
   try {
     const {userId, picturelistId, orderId, cartExist} = req.body
-    let {quantity} = req.body
-
-    if (quantity === undefined) quantity = 1
 
     // Sequelize method FIND OR CREATE
     const newOrder = await Order.findOrCreate({
@@ -53,27 +50,52 @@ Incoming JSON data
       }
     })
 
-    await OrderQuantity.create({
-      picturelistId: picturelistId,
-      orderId: newOrder[0].dataValues.id,
-      quantity: quantity
+    const order = await OrderQuantity.findOne({
+      where: {
+        picturelistId: picturelistId,
+        orderId: newOrder[0].dataValues.id
+      }
     })
 
-    res.status(201).json('newOrder')
+    if (order) {
+      order.quantity++
+    } else {
+      await OrderQuantity.create({
+        picturelistId: picturelistId,
+        orderId: newOrder[0].dataValues.id,
+        quantity: 1
+      })
+    }
+
+    await order.save()
+
+    res.status(204).json('newOrder')
   } catch (error) {
     next(error)
   }
 })
 
-// router.put('/:userId', async (req, res, next) => {
-//   try {
-//     const userid = req.params.userId
+router.put('/:userId/checkout', async (req, res, next) => {
+  try {
+    const userid = req.params.userId
 
-//     // await Order.update({})
-//   } catch (error) {
-//     next(err)
-//   }
-// })
+    await Order.update(
+      {
+        completed: true
+      },
+      {
+        where: {
+          userId: userid,
+          completed: false
+        }
+      }
+    )
+
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.put('/:userId/increase', async (req, res, next) => {
   try {
@@ -147,14 +169,9 @@ router.delete('/removeItem', async (req, res, next) => {
   }
 })
 
-// POST route for submitting an order
-router.post('/checkout', (req, res, next) => {})
-
 // Delete the current card(order) for the user
 router.delete('/clearCart', async (req, res, next) => {
   try {
-    console.log('Response ', req.body)
-
     await Order.destroy({
       where: {
         userId: req.body.userId,
