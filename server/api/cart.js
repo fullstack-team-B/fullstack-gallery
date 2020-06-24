@@ -24,32 +24,6 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-// router.get('/:userId', async (req, res, next) => {
-//   try {
-//     //get all pictures and quantity currently in the cart
-//     const userId = req.params.userId
-//     const order = await Order.findOne({
-//       where: {
-//         //hard-coded for testing
-//         userId: userId,
-//         // userId: req.params.id
-//         completed: false,
-//       },
-//     })
-//     let orderQuantities = await OrderQuantity.findAll({
-//       where: {orderId: order.id},
-//     })
-//     console.log('orderQuantities:', orderQuantities[0].dataValues)
-//     const cart = {}
-//     orderQuantities.forEach((ele) => {
-//       cart[ele.dataValues.picturelistId] = ele
-//     })
-//     res.json(cart)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
 // Post Request to Add item into cart and create a new Order
 router.post('/', async (req, res, next) => {
   /*
