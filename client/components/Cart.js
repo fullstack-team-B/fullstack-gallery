@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import history from '../history'
 import {
   gotItem,
   gotCart,
@@ -14,6 +15,10 @@ export class Cart extends React.Component {
   componentDidMount() {
     // Check if user is logged in before retrieving existing cart
     if (this.props.isLoggedIn) this.props.getCart(this.props.userId)
+  }
+  routeChange = () => {
+    let path = `/checkout`
+    history.push(path)
   }
   render() {
     const {id, picturelists, userId} = this.props.cart
@@ -60,7 +65,7 @@ export class Cart extends React.Component {
           })}
         </div>
         {this.props.cart.picturelists.length ? (
-          <button>Checkout</button>
+          <button onClick={this.routeChange}>Checkout</button>
         ) : (
           <div />
         )}
@@ -82,11 +87,15 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     getCart: userId => dispatch(gotCart(userId)),
+
     increaseQuantity: (userId, orderId, pictureId) =>
       dispatch(increaseQuantity(userId, orderId, pictureId)),
+
     decreaseQuantity: (userId, orderId, pictureId) =>
       dispatch(decreaseQuantity(userId, orderId, pictureId)),
+
     clearedCart: userId => dispatch(clearedCart(userId)),
+
     removedItem: (itemId, orderId, userId) =>
       dispatch(removedItem(itemId, orderId, userId))
   }
